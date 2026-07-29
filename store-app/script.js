@@ -1,5 +1,6 @@
-// script.js — Lógica do site da loja Ébano conectado à API REST
-const API_URL = 'http://localhost:5000/api';
+const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? 'http://localhost:5000/api'
+  : 'https://ebano.vercel.app/api';
 
 const currency = value => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const cart = [];
