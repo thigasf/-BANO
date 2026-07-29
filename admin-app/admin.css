@@ -136,8 +136,9 @@ h2 {
 
 .warning {
   background: #2a1b0e;
-  border-left: 2px solid var(--gold);
-  padding: 16px;
+  border-left: 3px solid var(--gold);
+  border-radius: 12px;
+  padding: 18px 20px;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.6;
@@ -150,10 +151,17 @@ form {
 }
 
 section {
-  border: 1px solid #8f662d33;
+  border: 1px solid rgba(143, 102, 45, 0.35);
   background: var(--panel);
-  padding: 28px;
+  border-radius: 18px;
+  padding: 30px;
   margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+section:hover {
+  border-color: rgba(189, 145, 79, 0.6);
 }
 
 section p {
@@ -176,10 +184,12 @@ label {
 input, select, textarea {
   font: 400 14px Montserrat;
   background: #0c0907;
-  border: 1px solid #8f662d55;
+  border: 1px solid rgba(143, 102, 45, 0.5);
+  border-radius: 10px;
   color: var(--cream);
-  padding: 13px;
+  padding: 13px 16px;
   width: 100%;
+  transition: all 0.25s ease;
 }
 
 textarea {
