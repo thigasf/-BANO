@@ -17,8 +17,3 @@ Abra o arquivo `index.html` em um navegador. Não é necessário instalar nada.
 - Escolha do contato entre Maria Eduarda e Thiago;
 - Layout adaptado para celular.
 
-## Antes de publicar
-
-1. Confirmar o número do WhatsApp da Maria Eduarda: o número recebido possui oito dígitos após o DDD (`+55 64 9285-4186`).
-2. Substituir as ilustrações da capa por fotos reais dos brigadeiros e das caixas da Ébano.
-3. Definir endereço/raio e taxa de entrega, caso haja entrega.
