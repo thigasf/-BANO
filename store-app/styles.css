@@ -266,15 +266,21 @@ nav a:hover, .text-link:hover {
 
 .hero-visual {
   height: 440px;
-  border: 1px solid rgba(168, 121, 58, 0.6);
+  border: 1px solid rgba(189, 145, 79, 0.6);
   border-radius: var(--radius-lg);
   position: relative;
-  background: linear-gradient(145deg, #2c1c10, #090705 60%);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(180deg, rgba(11, 9, 7, 0.4) 0%, rgba(11, 9, 7, 0.85) 100%), url('hero-bg.png') center/cover no-repeat;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(189, 145, 79, 0.2);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   overflow: hidden;
+  transition: var(--transition);
+}
+
+.hero-visual:hover {
+  border-color: var(--gold);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.9), 0 0 35px rgba(189, 145, 79, 0.3);
 }
 
 .visual-badge {
