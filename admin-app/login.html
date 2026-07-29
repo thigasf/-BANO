@@ -54,7 +54,7 @@
       
       <form id="login-form">
         <label>E-mail
-          <input type="email" id="email" required placeholder="admin@ebanobrigadeiros.com.br" autocomplete="username">
+          <input type="email" id="email" required placeholder="Digite seu e-mail" autocomplete="username">
         </label>
         <label>Senha
           <input type="password" id="password" required placeholder="Digite sua senha" autocomplete="current-password">
@@ -64,6 +64,7 @@
       <div class="error-message" id="error-message"></div>
     </div>
 
+    <script>
       const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5000/api'
         : 'https://ebano-seven.vercel.app/api';
