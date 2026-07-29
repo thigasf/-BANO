@@ -1,0 +1,526 @@
+:root {
+  --ink: #0b0907;
+  --panel: #17100b;
+  --gold: #bd914f;
+  --gold-light: #e0bd7f;
+  --cream: #f5ebdc;
+  --muted: #bba997;
+  --success: #2ec4b6;
+  --warning: #ffb703;
+  --danger: #e76f51;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 100% 0, #2d1b0d, transparent 35%), var(--ink);
+  color: var(--cream);
+  font-family: Montserrat, Arial, sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  padding: 20px 8vw;
+  border-bottom: 1px solid #8f662d44;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(11, 9, 7, 0.95);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header a {
+  color: var(--gold-light);
+  font-size: 11px;
+  text-decoration: none;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+header b {
+  display: block;
+  color: var(--gold-light);
+  font: 600 28px 'Cormorant Garamond';
+  letter-spacing: .14em;
+  text-align: right;
+}
+
+header span {
+  display: block;
+  font-size: 8px;
+  letter-spacing: .2em;
+  color: var(--muted);
+}
+
+/* NAVEGAÇÃO DE ABAS */
+.admin-tabs {
+  display: flex;
+  justify-content: center;
+  background: #120d09;
+  border-bottom: 1px solid #8f662d33;
+  padding: 0 4vw;
+}
+
+.tab-btn {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  padding: 18px 24px;
+  font: 500 11px Montserrat;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: 0.25s ease;
+}
+
+.tab-btn:hover {
+  color: var(--gold-light);
+}
+
+.tab-btn.active {
+  color: var(--gold);
+  border-bottom-color: var(--gold);
+  font-weight: 600;
+}
+
+/* CONTEÚDO DAS ABAS */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+main {
+  max-width: 960px;
+  margin: auto;
+  padding: 50px 24px 100px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  color: var(--gold-light);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 48px;
+  font-weight: 600;
+  margin: 6px 0 20px;
+  letter-spacing: 0.02em;
+}
+
+h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 15px;
+  color: var(--gold-light);
+}
+
+.warning {
+  background: #2a1b0e;
+  border-left: 2px solid var(--gold);
+  padding: 16px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-bottom: 35px;
+}
+
+form {
+  display: grid;
+  gap: 20px;
+}
+
+section {
+  border: 1px solid #8f662d33;
+  background: var(--panel);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+section p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: 0;
+}
+
+label {
+  display: grid;
+  gap: 7px;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  margin-top: 15px;
+}
+
+input, select, textarea {
+  font: 400 14px Montserrat;
+  background: #0c0907;
+  border: 1px solid #8f662d55;
+  color: var(--cream);
+  padding: 13px;
+  width: 100%;
+}
+
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.preview {
+  height: 180px;
+  margin-top: 18px;
+  border: 1px dashed #8f662d55;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+}
+
+/* BOTÕES */
+button {
+  background: var(--gold);
+  border: 1px solid var(--gold);
+  padding: 15px 24px;
+  color: #110b06;
+  font: 600 10px Montserrat;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background: var(--gold-light);
+  border-color: var(--gold-light);
+}
+
+button.secondary {
+  background: transparent;
+  color: var(--gold-light);
+  border-color: var(--gold-light);
+}
+
+button.secondary:hover {
+  background: rgba(189, 145, 79, 0.1);
+  color: var(--gold);
+  border-color: var(--gold);
+}
+
+.small-btn {
+  padding: 8px 16px;
+  font-size: 9px;
+}
+
+/* GRIDS DE CARDÁPIO */
+.admin-grid-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.admin-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #8f662d22;
+  background: #110c09;
+  padding: 18px 24px;
+  gap: 20px;
+}
+
+.admin-item-info h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  margin: 0 0 4px;
+  font-weight: 600;
+}
+
+.admin-item-info p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.admin-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* INPUT DE PREÇOS */
+.price-input-container {
+  display: flex;
+  align-items: center;
+  background: #0c0907;
+  border: 1px solid #8f662d55;
+  width: 140px;
+  padding-left: 10px;
+}
+
+.price-input-container span {
+  color: var(--gold-light);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.price-input-container input {
+  border: 0;
+  padding: 8px;
+}
+
+/* LISTAGEM DE PEDIDOS - TABELA */
+.table-container {
+  overflow-x: auto;
+  border: 1px solid #8f662d33;
+  background: var(--panel);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+
+.orders-table th, .orders-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #8f662d22;
+}
+
+.orders-table th {
+  background: #120d09;
+  color: var(--gold-light);
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.orders-table tbody tr:hover {
+  background: rgba(143, 102, 45, 0.05);
+}
+
+/* STATUS BADGES */
+.status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.status-badge.pending { background: rgba(255, 183, 3, 0.15); color: var(--warning); border: 1px solid var(--warning); }
+.status-badge.confirmed { background: rgba(46, 196, 182, 0.15); color: var(--success); border: 1px solid var(--success); }
+.status-badge.preparing { background: rgba(224, 189, 127, 0.15); color: var(--gold-light); border: 1px solid var(--gold-light); }
+.status-badge.delivering { background: rgba(189, 145, 79, 0.15); color: var(--gold); border: 1px solid var(--gold); }
+.status-badge.completed { background: rgba(46, 196, 182, 0.3); color: #fff; border: 1px solid var(--success); }
+.status-badge.cancelled { background: rgba(231, 111, 81, 0.15); color: var(--danger); border: 1px solid var(--danger); }
+
+/* MODAIS */
+dialog {
+  border: 1px solid var(--gold);
+  background: #17100b;
+  color: var(--cream);
+  padding: 34px;
+  width: min(500px, 90%);
+  box-shadow: 0 30px 70px #000;
+  position: relative;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+dialog .close {
+  position: absolute;
+  right: 22px;
+  top: 22px;
+  border: 0;
+  background: transparent;
+  color: var(--cream);
+  font-size: 29px;
+  cursor: pointer;
+  line-height: 0.6;
+}
+
+/* DETALHES DO PEDIDO */
+.order-details-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  background: #110c09;
+  padding: 18px;
+  border-left: 2px solid var(--gold);
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.order-details-items {
+  margin-top: 20px;
+}
+
+.order-detail-item-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #8f662d22;
+  padding: 10px 0;
+}
+
+.order-detail-item-row h4 {
+  font-size: 16px;
+  margin: 0 0 4px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+.order-detail-item-row p {
+  font-size: 11px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.order-detail-item-row strong {
+  color: var(--gold-light);
+  font-family: 'Cormorant Garamond';
+  font-size: 18px;
+}
+
+.saved {
+  transition: opacity 0.3s ease;
+}
+
+/* SLIDER / TOGGLE SWITCH */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2a1b0e;
+  border: 1px solid #8f662d55;
+  transition: .3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--muted);
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--gold);
+  border-color: var(--gold);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+  background-color: var(--ink);
+}
+
+@media (max-width: 600px) {
+  header {
+    padding: 15px 6vw;
+  }
+  header b {
+    font-size: 22px;
+  }
+  .tab-btn {
+    padding: 15px 12px;
+    font-size: 9px;
+  }
+  main {
+    padding: 30px 15px;
+  }
+  h1 {
+    font-size: 36px;
+  }
+  .order-details-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* REGRAS DE IMPRESSÃO DA COMANDA DA COZINHA */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #order-details-dialog, #order-details-dialog * {
+    visibility: visible;
+  }
+  #order-details-dialog {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    border: none !important;
+    background: #fff !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    padding: 10px !important;
+  }
+  #order-details-dialog .close, #order-details-dialog #btn-print-order {
+    display: none !important;
+  }
+  .order-details-info {
+    background: #f8f9fa !important;
+    color: #000 !important;
+    border-left: 4px solid #000 !important;
+  }
+  .order-detail-item-row strong {
+    color: #000 !important;
+  }
+}

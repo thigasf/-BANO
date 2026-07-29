@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Ébano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <script>
+      if (!localStorage.getItem('ebano_token')) {
+        window.location.href = 'login.html';
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <a href="http://localhost:3000">← Ver loja</a>
+      <div><b>ÉBANO</b><span>PAINEL DE GESTÃO</span></div>
+      <button id="logout-btn" class="secondary" style="padding: 7px 12px; margin-left: 20px; font-size: 9px; cursor: pointer;">Sair</button>
+    </header>
+
+    <nav class="admin-tabs" aria-label="Abas de Administração">
+      <button class="tab-btn active" data-tab="settings">Configurações</button>
+      <button class="tab-btn" data-tab="contacts">Atendentes</button>
+      <button class="tab-btn" data-tab="menu">Cardápio</button>
+      <button class="tab-btn" data-tab="orders">Pedidos</button>
+    </nav>
+
+    <main>
+      <!-- ABA 1: CONFIGURAÇÕES -->
+      <section id="tab-settings" class="tab-content active">
+        <p class="eyebrow">CONFIGURAÇÕES DA LOJA</p>
+        <h1>Opções de Atendimento</h1>
+        <p class="warning">Este painel salva alterações no banco de dados e sincroniza automaticamente com o site da loja.</p>
+        
+        <form id="config-form">
+          <section>
+            <h2>Atendimento e entrega</h2>
+            <label>Prazo exibido no site<input name="leadTime" placeholder="Ex.: encomende com 48h de antecedência"></label>
+            <label>Pedido mínimo (R$)<input name="minOrder" type="number" min="0" step="0.01" placeholder="0,00"></label>
+            <label>Taxa de entrega fixa (R$)<input name="deliveryFee" type="number" min="0" step="0.01" placeholder="0,00"></label>
+            <label>Chave Pix<input name="pixKey" placeholder="Cole a chave Pix da Ébano"></label>
+          </section>
+          
+          <section>
+            <h2>Cupom de desconto</h2>
+            <label>Código do cupom<input name="couponCode" placeholder="Ex.: PRIMEIRACOMPRA"></label>
+            <label>Desconto (%)<input name="couponPercent" type="number" min="0" max="100" step="1" placeholder="Ex.: 10"></label>
+          </section>
+          
+          <section>
+            <h2>Fotos da loja</h2>
+            <p>Use um link público da imagem ou envie uma foto leve (até 1 MB) para preencher a capa da loja.</p>
+            <label>Link da foto de capa<input name="heroImage" type="url" placeholder="https://..."></label>
+            <label>Enviar foto de capa<input id="hero-upload" type="file" accept="image/png,image/jpeg,image/webp"></label>
+            <div class="preview" id="preview">A prévia da foto aparecerá aqui</div>
+          </section>
+          
+          <button type="submit">Salvar alterações</button>
+          <button type="button" class="secondary" id="reset">Restaurar padrão</button>
+        </form>
+      </section>
+
+      <!-- ABA 2: ATENDENTES -->
+      <section id="tab-contacts" class="tab-content">
+        <p class="eyebrow">WhatsApp e Atendimento</p>
+        <h1>Atendentes da Loja</h1>
+        <p class="warning">Configure os números de celular para os quais os clientes enviarão as mensagens de pedidos formatadas.</p>
+        
+        <form id="contacts-form">
+          <section>
+            <h2>Atendente Principal 1 (Maria Eduarda)</h2>
+            <label>Nome de exibição<input name="contact1_name" placeholder="Ex.: Maria Eduarda"></label>
+            <label>Telefone / WhatsApp (ex: 556492854186)<input name="contact1_phone" placeholder="Digite apenas números com DDI e DDD"></label>
+          </section>
+          
+          <section>
+            <h2>Atendente Secundário 2 (Thiago)</h2>
+            <label>Nome de exibição<input name="contact2_name" placeholder="Ex.: Thiago"></label>
+            <label>Telefone / WhatsApp (ex: 5564992527258)<input name="contact2_phone" placeholder="Digite apenas números com DDI e DDD"></label>
+          </section>
+          
+          <button type="submit">Salvar Contatos</button>
+        </form>
+      </section>
+
+      <!-- ABA 3: CARDÁPIO -->
+      <section id="tab-menu" class="tab-content">
+        <p class="eyebrow">Gestão de Cardápio</p>
+        <h1>Sabores & Preços</h1>
+        <p class="warning">Adicione novos sabores ao cardápio, mude a disponibilidade ou altere os preços de brigadeiros avulsos e caixas em tempo real.</p>
+        
+        <section class="card-section">
+          <h2>Preços dos Produtos</h2>
+          <div id="products-list" class="admin-grid-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </section>
+
+        <section class="card-section" style="margin-top: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Sabores de Brigadeiro</h2>
+            <button id="btn-add-flavor" class="small-btn">Cadastrar Novo Sabor</button>
+          </div>
+          <div id="flavors-list" class="admin-grid-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </section>
+
+        <section class="card-section" style="margin-top: 30px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2>Depoimentos de Clientes</h2>
+            <button id="btn-add-testimonial" class="small-btn">Cadastrar Depoimento</button>
+          </div>
+          <div id="testimonials-admin-list" class="admin-grid-list">
+            <!-- Renderizado via JS -->
+          </div>
+        </section>
+      </section>
+
+      <!-- ABA 4: PEDIDOS -->
+      <section id="tab-orders" class="tab-content">
+        <p class="eyebrow">Registro de Compras</p>
+        <h1>Pedidos Recebidos</h1>
+        <p class="warning">Abaixo estão listados os pedidos registrados na loja pública. Você pode ver a seleção exata de sabores e atualizar os status de entrega/produção.</p>
+
+        <!-- Cards de Métricas -->
+        <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 30px;">
+          <div class="metric-card" style="background: #110c09; border: 1px solid #8f662d44; padding: 20px; text-align: center;">
+            <p style="font-size: 10px; color: var(--gold-light); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 6px;">Faturamento Total</p>
+            <h2 id="metric-revenue" style="font-size: 32px; color: var(--cream); margin: 0;">R$ 0,00</h2>
+          </div>
+          <div class="metric-card" style="background: #110c09; border: 1px solid #8f662d44; padding: 20px; text-align: center;">
+            <p style="font-size: 10px; color: var(--gold-light); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 6px;">Total de Pedidos</p>
+            <h2 id="metric-orders" style="font-size: 32px; color: var(--cream); margin: 0;">0</h2>
+          </div>
+          <div class="metric-card" style="background: #110c09; border: 1px solid #8f662d44; padding: 20px; text-align: center;">
+            <p style="font-size: 10px; color: var(--warning); letter-spacing: 0.12em; text-transform: uppercase; margin: 0 0 6px;">Em Produção / Fila</p>
+            <h2 id="metric-pending" style="font-size: 32px; color: var(--warning); margin: 0;">0</h2>
+          </div>
+        </div>
+
+        <!-- Filtros e Pesquisa de Pedidos -->
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
+          <input type="text" id="search-orders" placeholder="🔍 Buscar por nome de cliente ou ID..." style="max-width: 320px; padding: 10px 14px; font-size: 13px;">
+          <select id="filter-order-status" style="max-width: 220px; padding: 10px 14px; font-size: 13px;">
+            <option value="all">Todos os Status</option>
+            <option value="pending">Pendentes</option>
+            <option value="confirmed">Confirmados</option>
+            <option value="preparing">Preparando</option>
+            <option value="delivering">Enviados</option>
+            <option value="completed">Concluídos</option>
+            <option value="cancelled">Cancelados</option>
+          </select>
+        </div>
+        
+        <div class="table-container">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Cliente</th>
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="orders-tbody">
+              <!-- Renderizado via JS -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="saved" id="saved" aria-live="polite" style="margin-top: 20px; font-weight: 500; font-size: 14px; text-align: center;"></p>
+    </main>
+
+    <!-- Dialogs/Modals administrativos -->
+    <dialog id="flavor-dialog">
+      <button class="close dialog-close" aria-label="Fechar">×</button>
+      <p class="eyebrow" id="flavor-dialog-eyebrow">SABORES ÉBANO</p>
+      <h2 id="flavor-dialog-title">Cadastrar Novo Sabor</h2>
+      <form id="flavor-form" style="margin-top: 20px;">
+        <input type="hidden" id="flavor-id-input">
+        <label>Nome do Sabor<input id="flavor-name-input" required placeholder="Ex.: Brigadeiro de Pistache"></label>
+        <label>Descrição (opcional)<textarea id="flavor-desc-input" placeholder="Ex.: Feito com pasta de pistache italiana e granulado de pistache torrado"></textarea></label>
+        <label>URL da Foto do Sabor (opcional)<input id="flavor-image-input" placeholder="https://..."></label>
+        <label>Ou Enviar Foto<input id="flavor-upload" type="file" accept="image/png,image/jpeg,image/webp"></label>
+        <button type="submit" id="flavor-submit-btn" style="margin-top: 15px;">Cadastrar</button>
+      </form>
+    </dialog>
+
+    <dialog id="testimonial-dialog">
+      <button class="close dialog-close" aria-label="Fechar">×</button>
+      <p class="eyebrow">DEPOIMENTOS ÉBANO</p>
+      <h2 id="testimonial-dialog-title">Cadastrar Depoimento</h2>
+      <form id="testimonial-form" style="margin-top: 20px;">
+        <input type="hidden" id="testimonial-id-input">
+        <label>Nome do Cliente<input id="testimonial-name-input" required placeholder="Ex.: Carolina Silva"></label>
+        <label>Depoimento / Comentário<textarea id="testimonial-comment-input" required placeholder="Ex.: Os brigadeiros foram um sucesso absoluto no meu evento!"></textarea></label>
+        <label>Nota em Estrelas (1 a 5)<input id="testimonial-rating-input" type="number" min="1" max="5" value="5" required></label>
+        <button type="submit" style="margin-top: 15px;">Salvar Depoimento</button>
+      </form>
+    </dialog>
+
+    <dialog id="order-details-dialog" style="width: min(650px, 90%);">
+      <button class="close dialog-close" aria-label="Fechar">×</button>
+      <p class="eyebrow">DETALHES DO PEDIDO</p>
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 id="details-order-id" style="margin: 0;">Pedido #00</h2>
+        <button id="btn-print-order" class="small-btn secondary" style="padding: 8px 16px; margin-right: 35px;">🖨️ Imprimir Comanda</button>
+      </div>
+      <div id="order-details-content" class="order-details-content" style="margin-top: 20px; line-height: 1.6;">
+        <!-- Preenchido via JS -->
+      </div>
+    </dialog>
+    <script src="admin.js"></script>
+  </body>
+</html>

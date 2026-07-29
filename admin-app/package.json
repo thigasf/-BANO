@@ -1,0 +1,12 @@
+{
+  "name": "ebano-admin-app",
+  "version": "1.0.0",
+  "description": "Painel de Administração da Loja Ébano",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

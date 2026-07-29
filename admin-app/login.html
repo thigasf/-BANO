@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Painel Ébano</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+      .login-container {
+        max-width: 420px;
+        margin: 120px auto auto;
+        padding: 40px 30px;
+        border: 1px solid #8f662d77;
+        background: var(--panel);
+        box-shadow: 0 20px 50px #000;
+        text-align: center;
+      }
+      .login-container h1 {
+        font-size: 38px;
+        margin: 0 0 10px;
+        letter-spacing: 0.1em;
+      }
+      .login-container p {
+        color: var(--muted);
+        font-size: 13px;
+        margin-bottom: 30px;
+      }
+      .error-message {
+        color: #ff6b6b;
+        font-size: 13px;
+        margin-top: 15px;
+        min-height: 20px;
+      }
+      button {
+        width: 100%;
+        margin-top: 25px;
+      }
+      .brand-title {
+        font: 600 32px 'Cormorant Garamond';
+        letter-spacing: 0.15em;
+        color: var(--gold-light);
+        margin-bottom: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <div class="brand-title">ÉBANO</div>
+      <h1>Acesso Restrito</h1>
+      <p>Faça login para gerenciar as configurações da loja.</p>
+      
+      <form id="login-form">
+        <label>E-mail
+          <input type="email" id="email" required placeholder="admin@ebanobrigadeiros.com.br" autocomplete="username">
+        </label>
+        <label>Senha
+          <input type="password" id="password" required placeholder="Digite sua senha" autocomplete="current-password">
+        </label>
+        <button type="submit">Entrar no Painel</button>
+      </form>
+      <div class="error-message" id="error-message"></div>
+    </div>
+
+    <script>
+      const API_URL = 'http://localhost:5000/api';
+      const form = document.querySelector('#login-form');
+      const errorDiv = document.querySelector('#error-message');
+
+      // Se já estiver logado, redireciona para o painel
+      if (localStorage.getItem('ebano_token')) {
+        window.location.href = 'index.html';
+      }
+
+      form.addEventListener('submit', async event => {
+        event.preventDefault();
+        errorDiv.textContent = '';
+        const submitBtn = form.querySelector('button');
+        submitBtn.textContent = 'Autenticando...';
+        submitBtn.disabled = true;
+
+        const email = document.querySelector('#email').value;
+        const password = document.querySelector('#password').value;
+
+        try {
+          const res = await fetch(`${API_URL}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await res.json();
+
+          if (res.ok) {
+            localStorage.setItem('ebano_token', data.token);
+            localStorage.setItem('ebano_user', JSON.stringify(data.user));
+            window.location.href = 'index.html';
+          } else {
+            errorDiv.textContent = data.error || 'Erro ao fazer login';
+            submitBtn.textContent = 'Entrar no Painel';
+            submitBtn.disabled = false;
+          }
+        } catch (err) {
+          console.error(err);
+          errorDiv.textContent = 'Erro ao se conectar ao servidor.';
+          submitBtn.textContent = 'Entrar no Painel';
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
