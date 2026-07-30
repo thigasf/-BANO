@@ -207,23 +207,6 @@ function setupEventListeners() {
     unitDialog.close();
   };
 
-  // Botões de compras diretas da loja
-  const btnCaixa4 = document.querySelector('#btn-buy-caixa-4');
-  if (btnCaixa4) {
-    btnCaixa4.onclick = () => {
-      unitDialog.showModal();
-    };
-  }
-
-  const btnCaixaDeg = document.querySelector('#btn-buy-caixa-degustacao');
-  if (btnCaixaDeg) {
-    btnCaixaDeg.onclick = () => {
-      addItem('Caixa Degustação (10 Sabores)', 25, 1, 'Coleção com 1 de cada sabor exclusivo da Ébano');
-      cartPanel.classList.add('open');
-      overlay.classList.add('open');
-    };
-  }
-
   // Sacola Checkout
   document.querySelector('#checkout').onclick = () => checkoutDialog.showModal();
   document.querySelector('#order-cta').onclick = () => {

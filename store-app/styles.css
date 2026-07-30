@@ -1,24 +1,16 @@
-/* ─────────────────────────────────────────────
-   ÉBANO LUXURY BOUTIQUE DESIGN SYSTEM
-   Palette: Black (#0b0907), Gold (#bd914f / #e0bd7f), White (#ffffff / #f5ebdc)
-───────────────────────────────────────────── */
 :root {
-  --black-pure: #000000;
-  --black-deep: #0b0907;
-  --black-panel: #140e0a;
-  --black-card: #1a120c;
+  --ink: #0b0907;
+  --panel: #15100c;
+  --brown: #26170f;
   --gold: #bd914f;
   --gold-light: #e0bd7f;
-  --gold-glow: rgba(189, 145, 79, 0.25);
-  --white: #ffffff;
   --cream: #f5ebdc;
-  --muted: #a39585;
-  --border-gold: rgba(189, 145, 79, 0.35);
+  --muted: #bba997;
   --radius-sm: 8px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
   --radius-pill: 50px;
-  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {
@@ -31,119 +23,37 @@ html {
 
 body {
   margin: 0;
-  background-color: var(--black-deep);
+  background: var(--ink);
   color: var(--cream);
-  font-family: 'Montserrat', sans-serif;
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
+  font-family: Montserrat, Arial, sans-serif;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.container-narrow {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.text-center {
-  text-align: center;
+body:before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background: 
+    radial-gradient(circle at 10% 15%, #422917 0, transparent 30%),
+    radial-gradient(circle at 90% 80%, #321d10 0, transparent 35%);
+  z-index: -1;
 }
 
 /* ─────────────────────────────────────────────
-   TYPOGRAPHY
-───────────────────────────────────────────── */
-h1, h2, h3, .hero-brand-title, .brand b, .footer-brand b {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  color: var(--white);
-}
-
-.eyebrow {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--gold-light);
-  margin: 0 0 16px;
-  display: block;
-}
-
-/* ─────────────────────────────────────────────
-   BUTTONS
-───────────────────────────────────────────── */
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 18px 32px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  text-decoration: none;
-  transition: var(--transition);
-  border: 1px solid transparent;
-}
-
-.button-gold {
-  background: var(--gold);
-  border-color: var(--gold);
-  color: var(--black-pure);
-  box-shadow: 0 8px 25px rgba(189, 145, 79, 0.3);
-}
-
-.button-gold:hover {
-  background: var(--gold-light);
-  border-color: var(--gold-light);
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(189, 145, 79, 0.5);
-}
-
-.button-outline {
-  background: transparent;
-  border-color: var(--gold);
-  color: var(--gold-light);
-}
-
-.button-outline:hover {
-  background: rgba(189, 145, 79, 0.15);
-  color: var(--white);
-  transform: translateY(-3px);
-}
-
-.button-lg {
-  padding: 20px 44px;
-  font-size: 12px;
-}
-
-.full {
-  width: 100%;
-}
-
-/* ─────────────────────────────────────────────
-   HEADER
+   HEADER & BRAND
 ───────────────────────────────────────────── */
 .site-header {
-  height: 96px;
+  height: 92px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 6vw;
-  border-bottom: 1px solid var(--border-gold);
+  border-bottom: 1px solid rgba(143, 102, 45, 0.35);
   position: sticky;
   top: 0;
-  background: rgba(11, 9, 7, 0.9);
-  backdrop-filter: blur(16px);
+  background: rgba(11, 9, 7, 0.85);
+  backdrop-filter: blur(14px);
   z-index: 100;
 }
 
@@ -160,44 +70,69 @@ h1, h2, h3, .hero-brand-title, .brand b, .footer-brand b {
   transform: scale(1.02);
 }
 
-.brand b {
-  font-size: 26px;
-  letter-spacing: 0.15em;
+.brand b, .footer-brand {
+  font: 600 34px/1 'Cormorant Garamond', serif;
+  letter-spacing: 0.13em;
 }
 
-.brand small {
+.brand small, .footer-brand span {
   display: block;
   font-size: 8px;
-  letter-spacing: 0.35em;
-  color: var(--muted);
-  margin-top: 2px;
+  letter-spacing: 0.3em;
+  margin-top: 3px;
 }
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border: 2px solid var(--gold);
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(189, 145, 79, 0.2);
+}
+
+.brand-mark i {
+  height: 62px;
+  width: 12px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  position: absolute;
+  top: -11px;
+}
+
+.brand-mark i:nth-child(1) { left: -2px; }
+.brand-mark i:nth-child(2) { left: 7px; }
+.brand-mark i:nth-child(3) { left: 17px; }
+.brand-mark i:nth-child(4) { left: 27px; }
+.brand-mark i:nth-child(5) { left: 37px; }
 
 nav {
   display: flex;
-  gap: 36px;
+  gap: 30px;
 }
 
-nav a {
+nav a, .text-link, footer a {
   color: var(--cream);
   font-size: 11px;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
   text-decoration: none;
   text-transform: uppercase;
   transition: var(--transition);
+  position: relative;
 }
 
-nav a:hover {
+nav a:hover, .text-link:hover {
   color: var(--gold-light);
 }
 
 .cart-trigger {
-  background: rgba(189, 145, 79, 0.08);
+  background: rgba(189, 145, 79, 0.1);
   border: 1px solid var(--gold);
   color: var(--gold-light);
-  padding: 12px 22px;
-  font: 600 10px 'Montserrat';
-  letter-spacing: 0.18em;
+  padding: 11px 20px;
+  font: 600 10px Montserrat;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   cursor: pointer;
   border-radius: var(--radius-pill);
@@ -209,441 +144,450 @@ nav a:hover {
 
 .cart-trigger:hover {
   background: var(--gold);
-  color: var(--black-pure);
+  color: var(--ink);
   box-shadow: 0 0 20px rgba(189, 145, 79, 0.4);
+  transform: translateY(-2px);
 }
 
 .cart-trigger span {
   background: var(--gold);
-  color: var(--black-pure);
+  color: var(--ink);
   border-radius: 50%;
   padding: 2px 7px;
   font-weight: 700;
+  transition: var(--transition);
 }
 
 .cart-trigger:hover span {
-  background: var(--black-pure);
+  background: var(--ink);
   color: var(--gold-light);
 }
 
 .notice-bar {
-  background: #140d09;
-  border-bottom: 1px solid var(--border-gold);
-  padding: 12px 20px;
+  background: linear-gradient(90deg, #1b120c, #2b1c11, #1b120c);
+  border-bottom: 1px solid rgba(143, 102, 45, 0.25);
+  padding: 10px 20px;
   text-align: center;
   font-size: 11px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   color: var(--gold-light);
 }
 
 /* ─────────────────────────────────────────────
-   1. HERO SECTION (FULL-WIDTH BACKGROUND MARBLE)
+   HERO SECTION
 ───────────────────────────────────────────── */
-.hero-section {
-  min-height: 80vh;
-  padding: 120px 8vw;
-  display: flex;
+.hero {
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  background: linear-gradient(90deg, rgba(11, 9, 7, 0.92) 0%, rgba(11, 9, 7, 0.6) 50%, rgba(11, 9, 7, 0.3) 100%), url('hero-bg.png') center/cover no-repeat;
-  border-bottom: 1px solid var(--border-gold);
+  padding: 80px 10vw;
+  gap: 70px;
+  overflow: hidden;
 }
 
-.hero-content {
-  max-width: 650px;
-  animation: fadeIn 0.8s ease forwards;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.hero-brand {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.hero-brand-title {
-  font-size: 32px;
+.eyebrow, .card-label {
   color: var(--gold-light);
-  letter-spacing: 0.25em;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  margin: 0 0 14px;
 }
 
-.hero-title {
-  font-size: clamp(52px, 6.5vw, 84px);
-  line-height: 0.92;
-  margin: 0 0 20px;
+.hero h1, h2, h3 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
 }
 
-.hero-subtitle {
-  font-size: 20px;
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
+.hero h1 {
+  font-size: clamp(48px, 5.8vw, 78px);
+  line-height: 0.89;
+  margin: 0;
+  max-width: 580px;
+}
+
+.hero h1 em {
+  display: block;
+  color: var(--gold-light);
+  font-weight: 600;
+}
+
+.intro {
   color: var(--muted);
-  margin: 0 0 40px;
+  line-height: 1.8;
+  max-width: 390px;
+  margin: 30px 0;
 }
 
-.hero-buttons {
+.hero-actions {
   display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
 }
+
+.button, .outline-button {
+  font: 600 10px Montserrat;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 16px 26px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition);
+  border-radius: var(--radius-pill);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button {
+  background: linear-gradient(135deg, #d4a762, #bd914f);
+  border: 1px solid var(--gold);
+  color: #120c07;
+  box-shadow: 0 6px 20px rgba(189, 145, 79, 0.3);
+}
+
+.button:hover {
+  background: linear-gradient(135deg, #e0bd7f, #d4a762);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(189, 145, 79, 0.5);
+}
+
+.outline-button {
+  background: rgba(189, 145, 79, 0.05);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+}
+
+.outline-button:hover {
+  background: rgba(189, 145, 79, 0.2);
+  color: var(--cream);
+  transform: translateY(-3px);
+}
+
+.hero-visual {
+  height: 440px;
+  border: 1px solid rgba(189, 145, 79, 0.6);
+  border-radius: var(--radius-lg);
+  position: relative;
+  background: linear-gradient(180deg, rgba(11, 9, 7, 0.4) 0%, rgba(11, 9, 7, 0.85) 100%), url('hero-bg.png') center/cover no-repeat;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px rgba(189, 145, 79, 0.2);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.hero-visual:hover {
+  border-color: var(--gold);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.9), 0 0 35px rgba(189, 145, 79, 0.3);
+}
+
+.visual-badge {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--gold-light);
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  background: rgba(18, 12, 7, 0.85);
+  z-index: 2;
+  font-weight: 600;
+}
+
+.visual-card {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 78%;
+  padding: 30px 20px;
+  text-align: center;
+  background: rgba(21, 16, 12, 0.75);
+  border: 1px solid rgba(189, 145, 79, 0.4);
+  border-radius: var(--radius-md);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+  backdrop-filter: blur(10px);
+  z-index: 2;
+}
+
+.visual-logo {
+  font: 600 32px 'Cormorant Garamond', serif;
+  color: var(--gold-light);
+  letter-spacing: 0.18em;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.chocolate {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 30%, #7b4930, #27130d 60%);
+  border: 7px solid #160d09;
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.6);
+  transition: var(--transition);
+}
+
+.chocolate:hover {
+  transform: scale(1.1);
+}
+
+.one { bottom: 40px; left: 10%; }
+.two { bottom: 90px; left: 30%; background: radial-gradient(circle at 38% 30%, #c47b45, #522512 65%); }
+.three { bottom: 35px; left: 50%; background: radial-gradient(circle at 40% 30%, #f0b3ae, #8c4c48 65%); }
+.four { bottom: 95px; left: 68%; }
+.five { bottom: 30px; left: 78%; background: radial-gradient(circle at 40% 30%, #e8cf9e, #6c4b2a 65%); }
 
 /* ─────────────────────────────────────────────
-   SECTIONS GENERAL
+   SECTIONS & CARDS (ROUNDED & ANIMATED)
 ───────────────────────────────────────────── */
 .section {
-  padding: 120px 0;
+  padding: 95px 8vw;
 }
 
 .section-heading {
   text-align: center;
-  max-width: 700px;
-  margin: 0 auto 60px;
+  max-width: 640px;
+  margin: 0 auto 53px;
 }
 
-.section-heading h2 {
-  font-size: 52px;
-  line-height: 0.95;
-  margin: 0 0 16px;
-}
-
-.section-heading p {
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.8;
+.section-heading h2, .order-section h2, .cart-header h2, dialog h2 {
+  font-size: 48px;
+  line-height: 0.9;
   margin: 0;
 }
 
-/* ─────────────────────────────────────────────
-   2. SABORES (FEATURED & GRID)
-───────────────────────────────────────────── */
-.featured-product-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-  background: var(--black-panel);
-  border: 1px solid var(--border-gold);
-  border-radius: var(--radius-lg);
-  padding: 60px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-  margin-bottom: 60px;
-}
-
-.featured-product-image img {
-  width: 100%;
-  max-height: 440px;
-  object-fit: contain;
-  border-radius: var(--radius-md);
-  transition: var(--transition);
-}
-
-.featured-product-image img:hover {
-  transform: scale(1.03);
-}
-
-.featured-product-details h2 {
-  font-size: 44px;
-  margin: 0 0 20px;
-}
-
-.featured-product-details p {
+.section-heading > p:last-child, .order-section p, dialog > p {
   color: var(--muted);
-  font-size: 15px;
-  line-height: 1.8;
-  margin-bottom: 30px;
-}
-
-.featured-badge {
-  display: inline-block;
-  padding: 8px 18px;
-  border: 1px solid var(--gold);
-  border-radius: var(--radius-pill);
-  color: var(--gold-light);
-  font-size: 10px;
-  letter-spacing: 0.25em;
-  font-weight: 600;
+  line-height: 1.7;
+  font-size: 14px;
 }
 
 .flavor-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 1280px;
+  margin: auto;
 }
 
 .flavor {
-  padding: 28px;
-  border: 1px solid var(--border-gold);
+  min-height: 148px;
+  padding: 24px;
+  border: 1px solid rgba(154, 109, 52, 0.35);
   border-radius: var(--radius-md);
-  background: var(--black-card);
+  background: linear-gradient(135deg, #1b120d, #100c09);
+  position: relative;
   transition: var(--transition);
 }
 
 .flavor:hover {
   transform: translateY(-6px);
   border-color: var(--gold);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(189, 145, 79, 0.15);
 }
 
 .flavor-number {
   color: var(--gold);
-  font: 600 22px 'Cormorant Garamond';
-  border: 1px solid var(--gold);
+  font: 600 20px 'Cormorant Garamond';
+  border: 1px solid #b78a4b;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   display: grid;
   place-items: center;
 }
 
 .flavor h3 {
-  font-size: 24px;
-  margin: 20px 0 0;
+  font-size: 23px;
+  line-height: 1;
+  margin: 18px 0 0;
 }
 
-/* ─────────────────────────────────────────────
-   3. CAIXA 4, 4. DEGUSTAÇÃO & 5. CENTO (LUXURY GRID)
-───────────────────────────────────────────── */
-.section-products {
-  background: #0e0906;
-  border-block: 1px solid var(--border-gold);
+.options {
+  background: #120d09;
+  border-block: 1px solid rgba(143, 102, 45, 0.3);
 }
 
-.luxury-product-grid {
+.product-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  max-width: 1280px;
+  margin: auto;
 }
 
-.luxury-card {
-  background: var(--black-panel);
-  border: 1px solid var(--border-gold);
+.product-card {
+  border: 1px solid rgba(168, 121, 58, 0.5);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  padding: 34px 28px;
+  min-height: 360px;
   display: flex;
+  align-items: flex-start;
   flex-direction: column;
-  position: relative;
+  background: linear-gradient(145deg, #1b110b, #0c0907);
   transition: var(--transition);
 }
 
-.luxury-card:hover {
-  transform: translateY(-10px);
+.product-card:hover {
+  transform: translateY(-8px);
   border-color: var(--gold);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 25px var(--gold-glow);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(189, 145, 79, 0.2);
 }
 
-.luxury-card.featured {
+.product-card.featured {
   border-color: var(--gold);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(145deg, #352113, #120b07);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
-.card-featured-tag {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  background: var(--gold);
-  color: var(--black-pure);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  z-index: 2;
-}
-
-.luxury-card-img-wrap {
-  height: 280px;
-  width: 100%;
-  background: #090604;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  overflow: hidden;
-}
-
-.luxury-card-img-wrap img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  transition: var(--transition);
-}
-
-.luxury-card:hover .luxury-card-img-wrap img {
-  transform: scale(1.05);
-}
-
-.luxury-card-body {
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.luxury-card-body h3 {
+.product-icon {
   font-size: 32px;
-  margin: 0 0 10px;
-  line-height: 0.95;
+  color: var(--gold);
+  height: 40px;
 }
 
-.luxury-price {
+.product-card h3 {
+  font-size: 33px;
+  line-height: 0.9;
+  margin: 4px 0 17px;
+}
+
+.product-card p:not(.card-label) {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+.product-card strong {
   color: var(--gold-light);
   font: 600 28px 'Cormorant Garamond';
-  margin-bottom: 14px;
+  letter-spacing: 0.03em;
+  margin-top: auto;
+  padding: 22px 0 15px;
+}
+
+.product-card strong small {
+  font: 500 10px Montserrat;
+  color: var(--muted);
   display: block;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
 }
 
-.luxury-desc {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 0 0 28px;
-  flex: 1;
+.occasion-band {
+  display: flex;
+  justify-content: center;
+  gap: 11vw;
+  padding: 58px 7vw;
+  border-bottom: 1px solid rgba(143, 102, 45, 0.25);
 }
 
-/* ─────────────────────────────────────────────
-   CALCULADORA DE FESTAS
-───────────────────────────────────────────── */
-.calculator-box {
-  background: var(--black-panel);
-  border: 1px solid var(--border-gold);
-  border-radius: var(--radius-lg);
-  padding: 60px 40px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.calc-form {
-  display: grid;
-  gap: 20px;
-}
-
-.calc-result-box {
-  background: #0b0705;
-  border-left: 3px solid var(--gold);
-  padding: 30px;
+.occasion-band div {
   text-align: center;
-  border-radius: var(--radius-sm);
-  margin-top: 10px;
-}
-
-.calc-result-box h3 {
-  font-size: 32px;
   color: var(--gold-light);
-  margin: 10px 0;
+  transition: var(--transition);
 }
 
-.calc-price {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 20px;
+.occasion-band div:hover {
+  transform: translateY(-4px);
 }
 
-/* ─────────────────────────────────────────────
-   6. SOBRE (BLACK MARBLE BACKGROUND)
-───────────────────────────────────────────── */
-.section-sobre {
-  background: linear-gradient(180deg, rgba(11, 9, 7, 0.85) 0%, rgba(11, 9, 7, 0.95) 100%), url('marble-bg.png') center/cover no-repeat;
-  border-block: 1px solid var(--border-gold);
-  padding: 140px 0;
+.occasion-band span {
+  font-size: 30px;
 }
 
-.sobre-text {
-  font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(24px, 3.2vw, 36px);
-  line-height: 1.5;
-  color: var(--cream);
-  margin-top: 20px;
+.occasion-band h3 {
+  font-size: 24px;
+  margin: 8px 0 0;
 }
 
-/* ─────────────────────────────────────────────
-   7. FINAL CTA (BLACK MARBLE BACKGROUND)
-───────────────────────────────────────────── */
-.section-final-cta {
-  background: linear-gradient(180deg, rgba(11, 9, 7, 0.9) 0%, rgba(11, 9, 7, 0.95) 100%), url('marble-bg.png') center/cover no-repeat;
-  padding: 140px 0;
+.calculator-section {
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  transition: var(--transition);
 }
 
-.final-cta-title {
-  font-size: clamp(48px, 5.5vw, 76px);
-  margin: 10px 0 20px;
+.calculator-section:hover {
+  border-color: var(--gold) !important;
 }
 
-.final-cta-desc {
-  color: var(--muted);
-  font-size: 16px;
-  max-width: 520px;
-  margin: 0 auto 40px;
+.testimonials-section {
+  border-radius: var(--radius-lg);
 }
 
-/* ─────────────────────────────────────────────
-   FOOTER
-───────────────────────────────────────────── */
-.site-footer {
-  border-top: 1px solid var(--border-gold);
-  padding: 60px 0;
-  text-align: center;
-  background: var(--black-pure);
+.testimonial-card {
+  background: linear-gradient(145deg, #1b120c, #110c09);
+  border: 1px solid rgba(143, 102, 45, 0.4);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  transition: var(--transition);
 }
 
-.footer-brand {
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.service {
+  background: rgba(21, 16, 12, 0.6);
+  border: 1px solid rgba(143, 102, 45, 0.3);
+  border-radius: var(--radius-md);
+  padding: 30px 24px;
+  transition: var(--transition);
+}
+
+.service:hover {
+  transform: translateY(-5px);
+  border-color: var(--gold);
+}
+
+.order-section {
+  max-width: 1100px;
+  margin: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  justify-content: space-between;
+  gap: 35px;
+  background: linear-gradient(135deg, #24160d, #120b07);
+  padding: 60px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--gold);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
-.footer-brand b {
-  font-size: 24px;
-  letter-spacing: 0.18em;
-}
-
-.footer-brand small {
-  display: block;
-  font-size: 8px;
-  letter-spacing: 0.3em;
-  color: var(--muted);
-}
-
-.footer-quote {
-  font: italic 22px 'Cormorant Garamond';
-  color: var(--muted);
-  margin: 0 0 20px;
-}
-
-.footer-links a {
-  color: var(--gold-light);
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  text-decoration: none;
-}
-
-.footer-links span {
-  color: var(--muted);
-  margin: 0 10px;
+.order-section h2 {
+  font-size: 54px;
 }
 
 /* ─────────────────────────────────────────────
-   MODAIS & CART
+   MODAIS & CART (SUAVE & ARREDONDADO)
 ───────────────────────────────────────────── */
 .cart-panel {
   position: fixed;
   z-index: 1000;
   right: 0;
   top: 0;
-  width: min(450px, 100%);
+  width: min(440px, 100%);
   height: 100dvh;
-  background: rgba(20, 14, 10, 0.97);
+  background: rgba(23, 16, 11, 0.95);
   backdrop-filter: blur(20px);
   border-left: 1px solid var(--gold);
-  border-top-left-radius: var(--radius-lg);
-  border-bottom-left-radius: var(--radius-lg);
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
   padding: 34px;
   display: flex;
   flex-direction: column;
@@ -677,7 +621,7 @@ nav a:hover {
   justify-content: space-between;
   align-items: start;
   padding-bottom: 23px;
-  border-bottom: 1px solid var(--border-gold);
+  border-bottom: 1px solid rgba(143, 102, 45, 0.35);
 }
 
 .close {
@@ -696,7 +640,8 @@ nav a:hover {
 
 .close:hover {
   background: var(--gold);
-  color: var(--black-pure);
+  color: var(--ink);
+  transform: rotate(90deg);
 }
 
 .cart-items {
@@ -712,8 +657,50 @@ nav a:hover {
   padding: 70px 25px;
 }
 
+.cart-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  border-bottom: 1px solid rgba(143, 102, 45, 0.25);
+  padding: 16px 0;
+}
+
+.cart-item h3 {
+  font-size: 22px;
+  line-height: 1;
+  margin: 0 0 6px;
+}
+
+.cart-item p {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cart-item strong {
+  color: var(--gold-light);
+  font: 600 20px 'Cormorant Garamond';
+}
+
+.remove {
+  font: 600 9px Montserrat;
+  letter-spacing: 0.12em;
+  color: #ff6b6b;
+  background: none;
+  border: 0;
+  padding: 5px 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: var(--transition);
+}
+
+.remove:hover {
+  color: #ff8787;
+}
+
 .cart-summary {
-  border-top: 1px solid var(--border-gold);
+  border-top: 1px solid rgba(143, 102, 45, 0.4);
   padding-top: 20px;
 }
 
@@ -730,20 +717,46 @@ nav a:hover {
   text-transform: uppercase;
 }
 
-.cart-summary strong {
+.cart-summary strong, .dialog-total strong {
   font: 600 28px 'Cormorant Garamond';
   color: var(--gold-light);
 }
 
+.full {
+  width: 100%;
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ─────────────────────────────────────────────
+   DIALOGS / MODAIS (ANIMADOS & ARREDONDADOS)
+───────────────────────────────────────────── */
 dialog {
   border: 1px solid var(--gold);
-  background: rgba(20, 14, 10, 0.97);
+  background: rgba(23, 16, 11, 0.96);
   backdrop-filter: blur(20px);
   color: var(--cream);
-  padding: 40px;
+  padding: 38px;
   width: min(620px, calc(100% - 32px));
   border-radius: var(--radius-lg);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 30px rgba(189, 145, 79, 0.15);
+  animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 dialog::backdrop {
@@ -757,10 +770,74 @@ dialog .close {
   top: 22px;
 }
 
+.unit-picker {
+  border-top: 1px solid rgba(143, 102, 45, 0.35);
+  margin-top: 23px;
+}
+
+.unit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(143, 102, 45, 0.2);
+}
+
+.unit-row span {
+  font: 600 21px 'Cormorant Garamond';
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stepper button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: rgba(189, 145, 79, 0.1);
+  color: var(--gold-light);
+  font-size: 18px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: var(--transition);
+}
+
+.stepper button:hover {
+  background: var(--gold);
+  color: var(--ink);
+}
+
+.stepper input {
+  width: 44px;
+  text-align: center;
+  background: transparent;
+  border: 0;
+  color: var(--cream);
+  font: 600 15px Montserrat;
+  padding: 0;
+}
+
+.dialog-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 21px 0;
+}
+
+.dialog-total span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
 form {
   display: grid;
-  gap: 16px;
-  margin-top: 20px;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 label {
@@ -768,18 +845,20 @@ label {
   gap: 7px;
   font-size: 10px;
   font-weight: 600;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--gold-light);
 }
 
 input, select, textarea {
-  font: 400 14px 'Montserrat';
-  background: #090604;
-  border: 1px solid var(--border-gold);
+  font: 400 14px Montserrat;
+  background: #0c0907;
+  border: 1px solid rgba(143, 102, 45, 0.5);
   border-radius: var(--radius-sm);
   color: var(--cream);
-  padding: 14px 16px;
+  padding: 13px 16px;
+  resize: vertical;
+  transition: var(--transition);
 }
 
 input:focus, select:focus, textarea:focus {
@@ -788,14 +867,49 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 15px rgba(189, 145, 79, 0.3);
 }
 
+textarea {
+  min-height: 75px;
+}
+
+footer {
+  text-align: center;
+  border-top: 1px solid rgba(143, 102, 45, 0.3);
+  padding: 53px 20px;
+  color: var(--muted);
+}
+
+footer p {
+  font: italic 23px 'Cormorant Garamond';
+  margin: 13px;
+}
+
+.footer-brand {
+  color: var(--gold-light);
+}
+
+footer a {
+  color: var(--gold-light);
+}
+
 /* ─────────────────────────────────────────────
    RESPONSIVO
 ───────────────────────────────────────────── */
-@media (max-width: 992px) {
-  .luxury-product-grid { grid-template-columns: 1fr; }
-  .featured-product-card { grid-template-columns: 1fr; padding: 40px 24px; text-align: center; }
-  .site-header { height: 80px; padding: 0 5vw; }
+@media (max-width: 800px) {
+  .site-header { height: 75px; padding: 0 5vw; }
+  .brand b { font-size: 26px; }
+  .brand-mark { width: 34px; height: 34px; }
   nav { display: none; }
-  .hero-section { min-height: auto; padding: 100px 6vw 80px; }
-  .hero-title { font-size: 52px; }
+  .cart-trigger { padding: 9px 12px; font-size: 9px; }
+  .hero { grid-template-columns: 1fr; padding: 60px 6vw 80px; gap: 46px; min-height: auto; }
+  .hero h1 { font-size: 48px; }
+  .hero-visual { height: 320px; }
+  .chocolate { transform: scale(0.75); }
+  .section { padding: 65px 5vw; }
+  .section-heading h2 { font-size: 40px; }
+  .flavor-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-grid { grid-template-columns: 1fr; }
+  .occasion-band { gap: 6vw; padding: 38px 4vw; }
+  .order-section { flex-direction: column; padding: 40px 30px; text-align: center; }
+  .order-section h2 { font-size: 40px; }
+  .order-section .button { width: 100%; }
 }
