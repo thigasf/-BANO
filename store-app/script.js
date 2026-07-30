@@ -332,7 +332,7 @@ function setupEventListeners() {
       if (couponCode) {
         if (couponValid) {
           couponNotice.style.color = 'var(--gold-light)';
-          couponNotice.textContent = `🎉 Cupom "${config.couponCode}" aplicado! Desconto de ${discountPercent}% (-${currency(discount)}). Total com desconto: ${currency(estimatedTotal)}`;
+          couponNotice.textContent = `🎉 Cupom "${config.couponCode}" aplicado! Desconto de ${discountPercent}% (-${currency(discount)}). Total final: ${currency(estimatedTotal)}${fee > 0 ? ' (incluindo entrega)' : ''}`;
         } else {
           couponNotice.style.color = '#ff6b6b';
           couponNotice.textContent = `❌ Cupom "${couponCode}" inválido ou não ativo.`;
