@@ -137,6 +137,7 @@
         <label>Seu nome
           <input required name="name" placeholder="Como podemos te chamar?" />
         </label>
+
         <div class="form-columns">
           <label>Data desejada
             <input required name="date" type="date" />
@@ -145,6 +146,7 @@
             <input name="time" type="time" />
           </label>
         </div>
+
         <label>Entrega ou retirada
           <select name="delivery" id="delivery-select">
             <option value="pickup">Retirada em Rio Verde</option>
@@ -152,55 +154,63 @@
           </select>
         </label>
 
-        <!-- SEÇÃO DE ENDEREÇO (ENTREGA) -->
-        <div id="address-fields" style="display: none; border-top: 1px solid #8f662d44; padding-top: 16px; margin-top: 8px;">
-          <p class="eyebrow" style="margin-bottom: 12px; color: var(--gold-light);">ENDEREÇO DE ENTREGA</p>
+        <!-- SEÇÃO DE ENDEREÇO DE ENTREGA -->
+        <div id="address-fields" style="display: none;">
+          <p class="eyebrow" style="margin: 0; color: var(--gold-light);">ENDEREÇO DE ENTREGA</p>
+
           <label>CEP
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; gap: 10px;">
               <input name="cep" id="cep-input" placeholder="75900-000" maxlength="9" style="flex: 1;" />
-              <button type="button" id="btn-search-cep" class="outline-button" style="padding: 10px 14px; font-size: 10px; width: auto;">Buscar CEP</button>
+              <button type="button" id="btn-search-cep" class="outline-button" style="padding: 12px 18px; font-size: 10px; width: auto; white-space: nowrap;">Buscar CEP</button>
             </div>
           </label>
-          <div class="form-columns" style="margin-top: 12px;">
-            <label style="flex: 2;">Rua / Logradouro
+
+          <div class="form-columns">
+            <label style="grid-column: span 1;">Rua / Logradouro
               <input name="street" id="street-input" placeholder="Ex.: Av. Presidente Vargas" />
             </label>
-            <label style="flex: 1;">Número
+            <label style="grid-column: span 1;">Número
               <input name="number" id="number-input" placeholder="123" />
             </label>
           </div>
-          <div class="form-columns" style="margin-top: 12px;">
+
+          <div class="form-columns">
             <label>Bairro
               <input name="neighborhood" id="neighborhood-input" placeholder="Ex.: Setor Central" />
             </label>
-            <label>Complemento / Ponto de Referência
+            <label>Complemento / Referência
               <input name="complement" placeholder="Ex.: Apto 302 / Próximo à praça" />
             </label>
           </div>
           
-          <!-- ALERTA DE RESTRIÇÃO DE CIDADE (APENAS RIO VERDE - GO) -->
-          <div id="address-error" style="display: none; background: rgba(231, 111, 81, 0.15); border-left: 3px solid #ff6b6b; padding: 12px 15px; border-radius: 8px; margin-top: 14px; color: #ff8787; font-size: 12px; line-height: 1.5;"></div>
+          <!-- ALERTA DE RESTRIÇÃO DE CIDADE -->
+          <div id="address-error" style="display: none; background: rgba(231, 111, 81, 0.15); border-left: 3px solid #ff6b6b; padding: 14px 16px; border-radius: 8px; color: #ff8787; font-size: 12px; line-height: 1.5;"></div>
         </div>
 
-        <label style="margin-top: 12px;">Pagamento
+        <label>Forma de Pagamento
           <select name="payment">
             <option>Pix</option>
             <option>Dinheiro</option>
             <option>Cartão (consultar disponibilidade)</option>
           </select>
         </label>
+
         <label>Cupom de desconto
           <input name="coupon" placeholder="Digite seu cupom">
         </label>
+
         <label>Mensagem para presente (opcional)
           <input name="gift" placeholder="Ex.: Com carinho, Maria" />
         </label>
+
         <label>Enviar pedido para
           <select name="contact" id="contact-select"></select>
         </label>
-        <label>Observações
-          <textarea name="notes" placeholder="Ex.: cores, preferências ou instruções de entrega"></textarea>
+
+        <label>Observações do Pedido
+          <textarea name="notes" placeholder="Ex.: cores, preferências ou instruções de entrega" rows="3"></textarea>
         </label>
+
         <button class="button full" type="submit" style="margin-top: 10px;">Enviar pedido no WhatsApp</button>
       </form>
     </dialog>
