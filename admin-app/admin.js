@@ -718,10 +718,34 @@ function renderOrdersTable() {
         <td style="display: flex; gap: 8px; align-items: center;">
           <button class="small-btn secondary" onclick="viewOrderDetails(${order.id})">Detalhes</button>
           ${selectHtml}
+          <button class="small-btn" onclick="notifyCustomerWhatsApp(${order.id})" title="Enviar aviso de status no WhatsApp" style="padding: 5px 10px; font-size: 10px; border-radius: 14px; cursor: pointer; background: var(--gold); color: #000; font-weight: 600; border: none;">📱 Avisar</button>
         </td>
       </tr>
     `;
   }).join('');
+}
+
+function notifyCustomerWhatsApp(orderId) {
+  const order = allOrders.find(o => String(o.id) === String(orderId));
+  if (!order) return;
+
+  const statusMessages = {
+    pending: `Olá, ${order.customer_name}! Recebemos seu pedido #${order.id} na Ébano. Ele está em análise. Em breve te daremos retorno! 🍫✨`,
+    confirmed: `Olá, ${order.customer_name}! Seu pedido #${order.id} na Ébano foi CONFIRMADO com sucesso! 🎉\n\nTotal: ${currency(order.total)}\nData agendada: ${new Date(order.requested_date).toLocaleDateString('pt-BR')} ${order.requested_time ? 'às ' + order.requested_time : ''}.\n\nEm breve iniciaremos o preparo!`,
+    preparing: `Olá, ${order.customer_name}! Seu pedido #${order.id} da Ébano já está EM PREPARO na nossa confeitaria! 🍫✨\n\nEstamos caprichando em cada detalhe com muito carinho!`,
+    delivering: `Olá, ${order.customer_name}! Seu pedido #${order.id} da Ébano acabou de SAIR PARA ENTREGA! 🛵💨\n\n${order.fulfillment_method === 'delivery' ? `Endereço: ${order.delivery_address || 'Cadastrado'}` : 'Seu pedido já está pronto para retirada em Rio Verde!'}\n\nFique atento para receber!`,
+    completed: `Olá, ${order.customer_name}! Seu pedido #${order.id} foi ENTREGUE com sucesso! 💖\n\nAgradecemos a preferência pela Ébano Brigadeiros. Tenha um excelente momento!`,
+    cancelled: `Olá, ${order.customer_name}! Informamos que o seu pedido #${order.id} na Ébano foi CANCELADO. Caso tenha qualquer dúvida, estamos à disposição!`
+  };
+
+  const message = statusMessages[order.status] || `Olá, ${order.customer_name}! Atualização sobre seu pedido #${order.id} na Ébano: status atualizado para ${order.status}.`;
+  
+  let phone = (order.customer_phone || '').replace(/\D/g, '');
+  if (!phone || phone.length < 10) {
+    phone = config.contact1_phone || '556492854186';
+  }
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
 }
 
 if (searchOrdersInput) searchOrdersInput.addEventListener('input', renderOrdersTable);
@@ -806,11 +830,14 @@ async function viewOrderDetails(id) {
         ${itemsHtml}
       </div>
 
-      <div style="margin-top: 25px; text-align: right; font-size: 14px; border-top: 1px solid #8f662d44; padding-top: 15px;">
-        <span style="color: var(--muted);">Subtotal: ${subtotalVal}</span><br>
-        ${order.coupon_code ? `<span style="color: var(--warning);">Cupom (${order.coupon_code}): -${discountVal}</span><br>` : ''}
-        <span style="color: var(--muted);">Taxa de entrega: ${deliveryFeeVal}</span><br>
-        <span style="font-size: 22px; font-weight: 600; color: var(--gold-light); display: inline-block; margin-top: 10px;">Total: ${totalVal}</span>
+      <div style="margin-top: 25px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid #8f662d44; padding-top: 15px;">
+        <button onclick="notifyCustomerWhatsApp(${order.id})" style="padding: 10px 18px; font-size: 11px; border-radius: 20px; cursor: pointer; background: var(--gold); color: #000; font-weight: 600; border: none; display: inline-flex; align-items: center; gap: 6px;">📱 Avisar Cliente no WhatsApp</button>
+        <div style="text-align: right; font-size: 14px;">
+          <span style="color: var(--muted);">Subtotal: ${subtotalVal}</span><br>
+          ${order.coupon_code ? `<span style="color: var(--warning);">Cupom (${order.coupon_code}): -${discountVal}</span><br>` : ''}
+          <span style="color: var(--muted);">Taxa de entrega: ${deliveryFeeVal}</span><br>
+          <span style="font-size: 22px; font-weight: 600; color: var(--gold-light); display: inline-block; margin-top: 10px;">Total: ${totalVal}</span>
+        </div>
       </div>
     `;
 
