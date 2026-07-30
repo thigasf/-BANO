@@ -438,8 +438,10 @@ function setupEventListeners() {
   };
 
   // Enviar Formulário de Pedido (Salva no BD e depois envia no WhatsApp)
-  document.querySelector('#checkout-form').onsubmit = async event => {
-    event.preventDefault();
+  const checkoutForm = document.querySelector('#checkout-form');
+  if (checkoutForm) {
+    checkoutForm.onsubmit = async event => {
+      event.preventDefault();
     const submitBtn = event.target.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
 
@@ -577,6 +579,7 @@ function setupEventListeners() {
       submitBtn.disabled = false;
     }
   };
+}
 }
 
 // Helpers
