@@ -577,18 +577,6 @@ function setupEventListeners() {
       submitBtn.disabled = false;
     }
   };
-      
-      // Limpar sacola e fechar modal
-      cart.length = 0;
-      renderCart();
-      checkoutDialog.close();
-    } catch (err) {
-      console.error('Erro ao processar pedido:', err);
-      alert('Ocorreu um erro ao processar o seu pedido localmente. Tentando prosseguir pelo WhatsApp...');
-    } finally {
-      submitBtn.disabled = false;
-    }
-  };
 }
 
 // Helpers
