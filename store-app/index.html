@@ -3,132 +3,280 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Ébano Brigadeiros Artesanais — encomendas em Rio Verde, GO." />
+    <meta name="description" content="Ébano Brigadeiros Artesanais — Confeitaria Fina & Experiências Únicas em Rio Verde, GO." />
     <title>Ébano | Brigadeiros Artesanais</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <link rel="apple-touch-icon" href="favicon.png" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- CABEÇALHO DA LOJA -->
     <header class="site-header">
       <a class="brand" href="#inicio" aria-label="Ébano - início">
-        <img src="logo.svg" alt="Ébano Logo" class="brand-logo-img" width="42" height="42" />
-        <span><b>ÉBANO</b><small>BRIGADEIROS ARTESANAIS</small></span>
+        <img src="logo.svg" alt="Ébano Logo" class="brand-logo-img" width="40" height="40" />
+        <span><b>É B A N O</b><small>BRIGADEIROS ARTESANAIS</small></span>
       </a>
       <nav aria-label="Navegação principal">
-        <a href="#sabores">Sabores</a><a href="#opcoes">Opções</a><a href="#calculadora">Calculadora de Festas</a><a href="#depoimentos">Depoimentos</a>
+        <a href="#sabores">Sabores</a>
+        <a href="#opcoes">Produtos</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#calculadora">Eventos</a>
+        <a href="#contato">Contato</a>
       </nav>
-      <button class="cart-trigger" id="open-cart" type="button" aria-label="Abrir carrinho">Sacola <span id="cart-count">0</span></button>
+      <button class="cart-trigger" id="open-cart" type="button" aria-label="Abrir sacola">
+        Sacola <span id="cart-count">0</span>
+      </button>
     </header>
-    <div class="notice-bar">Encomendas sob consulta · Retirada ou entrega em Rio Verde · <span id="notice-lead-time">Confirme o prazo antes de finalizar</span></div>
+
+    <div class="notice-bar">
+      Encomendas sob consulta · Retirada ou entrega em Rio Verde · <span id="notice-lead-time">Confirme o prazo antes de finalizar</span>
+    </div>
 
     <main>
-      <section class="hero" id="inicio">
-        <div class="hero-copy">
-          <p class="eyebrow">RIO VERDE · GO</p>
-          <h1>Brigadeiros artesanais <em>para momentos especiais.</em></h1>
-          <p class="intro">Feitos à mão, com ingredientes selecionados e cuidado em cada detalhe.</p>
-          <div class="hero-actions"><a class="button" href="#opcoes">Montar meu pedido</a><a class="text-link" href="#sabores">Conheça os sabores <span>→</span></a></div>
-        </div>
-        <div class="hero-visual" aria-label="Apresentação de Brigadeiros Artesanais Ébano">
-          <div class="visual-badge">100% ARTESANAL</div>
-          <div class="visual-card">
-            <img src="logo.svg" alt="Ébano Logo" class="visual-logo-img" width="56" height="56" style="margin-bottom: 8px;" />
-            <span class="visual-logo">É B A N O</span>
-            <p>BRIGADEIROS ARTESANAIS</p>
+      <!-- 1. HERO SECTION -->
+      <section class="hero-section" id="inicio">
+        <div class="hero-content">
+          <div class="hero-brand">
+            <img src="logo.svg" alt="Ébano Logo" class="hero-logo-icon" width="64" height="64" />
+            <span class="hero-brand-title">É B A N O</span>
           </div>
-          <span class="chocolate one"></span>
-          <span class="chocolate two"></span>
-          <span class="chocolate three"></span>
-          <span class="chocolate four"></span>
-          <span class="chocolate five"></span>
-        </div>
-      </section>
-
-      <section class="section flavors" id="sabores">
-        <div class="section-heading"><p class="eyebrow">NOSSO CARDÁPIO</p><h2>Sabores que encantam</h2><p>Escolha seus favoritos para montar caixas, kits ou encomendas especiais.</p></div>
-        <div class="flavor-grid" id="flavor-grid"></div>
-      </section>
-
-      <section class="section options" id="opcoes">
-        <div class="section-heading"><p class="eyebrow">PARA CADA OCASIÃO</p><h2>Escolha a sua experiência</h2></div>
-        <div class="product-grid" id="product-grid">
-          <!-- Renderizado dinamicamente via JS a partir da API do backend -->
-        </div>
-      </section>
-
-      <section class="occasion-band"><div><span>♧</span><h3>Casamentos</h3></div><div><span>♢</span><h3>Festas</h3></div><div><span>♡</span><h3>Presentes</h3></div></section>
-
-      <!-- CALCULADORA DE EVENTOS & FESTAS -->
-      <section class="section calculator-section" id="calculadora" style="background: var(--panel); border: 1px solid #8f662d44; padding: 40px 24px; margin: 40px auto; max-width: 960px;">
-        <div class="section-heading" style="text-align: center;">
-          <p class="eyebrow">PLANEJAMENTO DE FESTAS</p>
-          <h2>Calculadora de Brigadeiros para Eventos</h2>
-          <p>Digite a quantidade de convidados para calcular a sugestão ideal de centos e o valor estimado.</p>
-        </div>
-        <form id="event-calc-form" style="max-width: 500px; margin: 30px auto 0; display: grid; gap: 15px;">
-          <label style="display: grid; gap: 5px; font-size: 11px; color: var(--gold-light); text-transform: uppercase;">
-            Quantidade de Convidados
-            <input type="number" id="guests-count" min="10" max="1000" value="50" style="padding: 12px; font-size: 16px; background: #0c0907; border: 1px solid #8f662d55; color: var(--cream);">
-          </label>
-          <label style="display: grid; gap: 5px; font-size: 11px; color: var(--gold-light); text-transform: uppercase;">
-            Tipo de Evento
-            <select id="event-type" style="padding: 12px; font-size: 14px; background: #0c0907; border: 1px solid #8f662d55; color: var(--cream);">
-              <option value="adult">Aniversário / Festa de Adulto (5 a 6 un/convidado)</option>
-              <option value="wedding">Casamento / Formatura (6 a 8 un/convidado)</option>
-              <option value="kids">Festa Infantil (3 a 4 un/convidado)</option>
-              <option value="corporate">Evento Corporativo (3 a 4 un/convidado)</option>
-            </select>
-          </label>
-          <div id="calc-result" style="background: #110c09; border-left: 3px solid var(--gold); padding: 20px; text-align: center; margin-top: 10px;">
-            <p style="margin: 0 0 5px; font-size: 13px; color: var(--muted);">Recomendação para <strong id="calc-guests-label">50</strong> convidados:</p>
-            <h3 id="calc-qty-recommendation" style="font-size: 28px; color: var(--gold-light); font-family: 'Cormorant Garamond'; margin: 5px 0;">250 brigadeiros (~2.5 centos)</h3>
-            <p style="margin: 5px 0 15px; font-size: 16px; font-weight: 600;" id="calc-price-estimate">Estimativa: R$ 300,00</p>
-            <button id="calc-whatsapp-btn" class="button full" type="button">Pedir Orçamento pelo WhatsApp</button>
+          <h1 class="hero-title">Brigadeiros Artesanais</h1>
+          <p class="hero-subtitle">Sofisticação em cada detalhe.</p>
+          <div class="hero-buttons">
+            <a class="button button-gold" href="#opcoes">Fazer Pedido</a>
+            <a class="button button-outline" href="#sabores">Conhecer Sabores</a>
           </div>
-        </form>
-      </section>
-
-      <!-- DEPOIMENTOS DE CLIENTES -->
-      <section class="section testimonials-section" id="depoimentos" style="margin: 60px auto; max-width: 960px;">
-        <div class="section-heading" style="text-align: center;">
-          <p class="eyebrow">AVALIAÇÕES DE CLIENTES</p>
-          <h2>O Que Dizem Nossos Clientes</h2>
-        </div>
-        <div id="testimonials-grid" class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-top: 30px;">
-          <!-- Renderizado dinamicamente via JS a partir da API -->
         </div>
       </section>
 
-      <section class="section services"><div class="service"><span>♡</span><h3>Para presentear</h3><p>Inclua uma mensagem especial e transforme sua caixa em um presente inesquecível.</p></div><div class="service"><span>✦</span><h3>Eventos personalizados</h3><p>Escolha sabores, cores e detalhes para celebrar do seu jeito.</p></div><div class="service"><span>◈</span><h3>Entrega em Rio Verde</h3><p>Consulte disponibilidade e taxa para o seu bairro no momento do pedido.</p></div></section>
+      <!-- 2. SABORES (FEATURED SINGLE BRIGADEIRO & CATALOG) -->
+      <section class="section section-sabores" id="sabores">
+        <div class="container">
+          <div class="featured-product-card">
+            <div class="featured-product-image">
+              <img src="single-brigadeiro.png" alt="Brigadeiro Artesanal Ébano" class="img-fluid" />
+            </div>
+            <div class="featured-product-details">
+              <span class="eyebrow">ARTE EM CHOCOLATE</span>
+              <h2>Feitos à Mão, Sabor por Sabor</h2>
+              <p>Cada brigadeiro é moldado manualmente com ingredientes nobres e confeitos selecionados, proporcionando uma experiência de textura aveludada e sabor Incomparável.</p>
+              <div class="featured-badge">100% ARTESANAL</div>
+            </div>
+          </div>
 
-      <section class="section order-section" id="encomendas">
-        <div><p class="eyebrow">ENCOMENDAS EM RIO VERDE</p><h2>Seu momento merece Ébano.</h2><p>Faça seu pedido com tranquilidade. Para eventos e pedidos especiais, fale diretamente conosco.</p></div>
-        <button class="button" id="order-cta" type="button">Fazer encomenda</button>
+          <div class="section-heading" style="margin-top: 80px;">
+            <p class="eyebrow">NOSSO CARDÁPIO DE SABORES</p>
+            <h2>Sabores Exclusivos</h2>
+            <p>Escolha seus favoritos para compor caixas personalizadas e encomendas especiais.</p>
+          </div>
+          
+          <div class="flavor-grid" id="flavor-grid">
+            <!-- Renderizado dinamicamente via JS a partir da API -->
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. CAIXA COM 4 BRIGADEIROS, 4. CAIXA DEGUSTAÇÃO & 5. CENTO PARA FESTAS -->
+      <section class="section section-products" id="opcoes">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow">COLEÇÕES EXCLUSIVAS</p>
+            <h2>Experiências & Opções</h2>
+            <p>Escolha a opção ideal para presentear, degustar ou celebrar seus melhores momentos.</p>
+          </div>
+
+          <div class="luxury-product-grid">
+            <!-- 3. CAIXA COM 4 BRIGADEIROS -->
+            <div class="luxury-card">
+              <div class="luxury-card-img-wrap">
+                <img src="caixa-4.png" alt="Caixa com 4 Brigadeiros" />
+              </div>
+              <div class="luxury-card-body">
+                <h3>Caixa com 4 Brigadeiros</h3>
+                <span class="luxury-price">R$ 12</span>
+                <p class="luxury-desc">Perfeita para presentear ou experimentar.</p>
+                <button class="button button-gold full" id="btn-buy-caixa-4" type="button">Comprar</button>
+              </div>
+            </div>
+
+            <!-- 4. CAIXA DEGUSTAÇÃO -->
+            <div class="luxury-card featured">
+              <div class="card-featured-tag">MAIS DESEJADO</div>
+              <div class="luxury-card-img-wrap">
+                <img src="caixa-degustacao.png" alt="Caixa Degustação Ébano" />
+              </div>
+              <div class="luxury-card-body">
+                <h3>Caixa Degustação</h3>
+                <span class="luxury-price">R$ 25</span>
+                <p class="luxury-desc">Experimente nossos 10 sabores exclusivos.</p>
+                <button class="button button-gold full" id="btn-buy-caixa-degustacao" type="button">Comprar</button>
+              </div>
+            </div>
+
+            <!-- 5. CENTO PARA FESTAS -->
+            <div class="luxury-card">
+              <div class="luxury-card-img-wrap">
+                <img src="single-brigadeiro.png" alt="Cento de Brigadeiros para Festas" />
+              </div>
+              <div class="luxury-card-body">
+                <h3>Cento de Brigadeiros</h3>
+                <span class="luxury-price">A partir de R$ 120</span>
+                <p class="luxury-desc">Ideal para casamentos, aniversários e eventos.</p>
+                <a class="button button-outline full" href="#calculadora">Solicitar Orçamento</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALCULADORA DE EVENTOS -->
+      <section class="section section-calc" id="calculadora">
+        <div class="container">
+          <div class="calculator-box">
+            <div class="section-heading" style="margin-bottom: 30px;">
+              <p class="eyebrow">PLANEJAMENTO DE EVENTOS</p>
+              <h2>Calculadora de Brigadeiros</h2>
+              <p>Simule a quantidade exata de brigadeiros necessária para o seu evento.</p>
+            </div>
+            <form id="event-calc-form" class="calc-form">
+              <label>
+                Quantidade de Convidados
+                <input type="number" id="guests-count" min="10" max="1000" value="50" required />
+              </label>
+              <label>
+                Tipo de Evento
+                <select id="event-type">
+                  <option value="adult">Aniversário / Festa de Adulto (5 a 6 un/convidado)</option>
+                  <option value="wedding">Casamento / Formatura (6 a 8 un/convidado)</option>
+                  <option value="kids">Festa Infantil (3 a 4 un/convidado)</option>
+                  <option value="corporate">Evento Corporativo (3 a 4 un/convidado)</option>
+                </select>
+              </label>
+              <div id="calc-result" class="calc-result-box">
+                <p>Recomendação para <strong id="calc-guests-label">50</strong> convidados:</p>
+                <h3 id="calc-qty-recommendation">250 brigadeiros (~2.5 centos)</h3>
+                <p id="calc-price-estimate" class="calc-price">Estimativa: R$ 300,00</p>
+                <button id="calc-whatsapp-btn" class="button button-gold full" type="button">Pedir Orçamento pelo WhatsApp</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. SOBRE (BLACK MARBLE BACKGROUND) -->
+      <section class="section section-sobre" id="sobre">
+        <div class="container container-narrow text-center">
+          <img src="logo.svg" alt="Ébano Emblem" width="60" height="60" style="margin-bottom: 20px;" />
+          <span class="eyebrow">TRADIÇÃO & REFINAMENTO</span>
+          <h2>Feito artesanalmente</h2>
+          <p class="sobre-text">
+            Selecionamos ingredientes de qualidade para produzir brigadeiros com acabamento impecável e sabor marcante.
+          </p>
+        </div>
+      </section>
+
+      <!-- 7. FINAL CTA (BLACK MARBLE BACKGROUND) -->
+      <section class="section section-final-cta" id="contato">
+        <div class="container text-center">
+          <span class="eyebrow">MOMENTOS INESQUECÍVEIS</span>
+          <h2 class="final-cta-title">Seu evento merece ÉBANO.</h2>
+          <p class="final-cta-desc">Fale conosco para montar a seleção de sabores perfeita para a sua celebração.</p>
+          <button class="button button-gold button-lg" id="order-cta" type="button">Solicitar Orçamento</button>
+        </div>
       </section>
     </main>
 
-    <footer>
-      <div class="footer-brand" style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;">
-        <img src="logo.svg" alt="Ébano Logo" width="36" height="36" />
-        <div>É B A N O <span>BRIGADEIROS ARTESANAIS</span></div>
+    <!-- RODAPÉ DA LOJA -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-brand">
+          <img src="logo.svg" alt="Ébano Logo" width="38" height="38" />
+          <span><b>É B A N O</b><small>BRIGADEIROS ARTESANAIS</small></span>
+        </div>
+        <p class="footer-quote">Feito com ingredientes selecionados e muito amor em cada detalhe. ♡</p>
+        <div class="footer-links">
+          <a href="https://instagram.com/ebanobrigadeiros" target="_blank" rel="noreferrer">@ebanobrigadeiros</a>
+          <span>·</span>
+          <span>Rio Verde - GO</span>
+        </div>
       </div>
-      <p>Feito com ingredientes selecionados e muito amor em cada detalhe. ♡</p>
-      <a href="https://instagram.com/ebanobrigadeiros" target="_blank" rel="noreferrer">@ebanobrigadeiros</a>
     </footer>
 
+    <!-- PAINEL DA SACOLA DE COMPRAS -->
     <aside class="cart-panel" id="cart-panel" aria-hidden="true" aria-label="Sacola de compras">
-      <div class="cart-header"><div><p class="eyebrow">SEU PEDIDO</p><h2>Sacola</h2></div><button class="close" id="close-cart" aria-label="Fechar sacola">×</button></div>
-      <div class="cart-items" id="cart-items"><p class="empty">Sua sacola está vazia.<br />Que tal começar escolhendo seus sabores?</p></div>
-      <div class="cart-summary"><p class="shipping-note" id="shipping-note">Taxa de entrega consultada no fechamento.</p><div><span>Total</span><strong id="cart-total">R$ 0,00</strong></div><button class="button full" id="checkout" type="button" disabled>Finalizar pelo WhatsApp</button></div>
+      <div class="cart-header">
+        <div>
+          <p class="eyebrow">SUA SELEÇÃO</p>
+          <h2>Sacola</h2>
+        </div>
+        <button class="close" id="close-cart" aria-label="Fechar sacola">×</button>
+      </div>
+      <div class="cart-items" id="cart-items">
+        <p class="empty">Sua sacola está vazia.<br />Que tal começar escolhendo seus sabores?</p>
+      </div>
+      <div class="cart-summary">
+        <p class="shipping-note" id="shipping-note">Taxa de entrega consultada no fechamento.</p>
+        <div>
+          <span>Total</span>
+          <strong id="cart-total">R$ 0,00</strong>
+        </div>
+        <button class="button button-gold full" id="checkout" type="button" disabled>Finalizar pelo WhatsApp</button>
+      </div>
     </aside>
     <div class="overlay" id="overlay"></div>
 
-    <dialog id="unit-dialog"><button class="close dialog-close" aria-label="Fechar">×</button><p class="eyebrow">BRIGADEIROS AVULSOS</p><h2>Monte sua seleção</h2><p>Unidades avulsas custam R$ 4,00. A cada grupo completo de 4 brigadeiros, o valor é R$ 12,00. Escolha um de cada sabor para formar a caixa degustação por R$ 25,00.</p><div id="unit-picker" class="unit-picker"></div><div class="dialog-total"><span id="units-total">0 unidades</span><strong id="units-price">R$ 0,00</strong></div><small class="discount-message" id="discount-message">Adicione 4 unidades para formar o primeiro grupo especial.</small><button class="outline-button negotiate-button" id="negotiate-large-order" type="button" hidden>Negociar pedido a partir de 100</button><button class="button full" id="add-units-cart" type="button" disabled>Adicionar à sacola</button></dialog>
-    <dialog id="checkout-dialog"><button class="close dialog-close" aria-label="Fechar">×</button><p class="eyebrow">QUASE LÁ</p><h2>Finalize sua encomenda</h2><p>Envie o pedido pelo WhatsApp e confirmaremos os detalhes de entrega ou retirada.</p><form id="checkout-form"><label>Seu nome<input required name="name" placeholder="Como podemos te chamar?" /></label><div class="form-columns"><label>Data desejada<input required name="date" type="date" /></label><label>Horário desejado<input name="time" type="time" /></label></div><label>Entrega ou retirada<select name="delivery"><option value="pickup">Retirada em Rio Verde</option><option value="delivery">Entrega (confirmar endereço)</option></select></label><label>Pagamento<select name="payment"><option>Pix</option><option>Dinheiro</option><option>Cartão (consultar disponibilidade)</option></select></label><label>Cupom de desconto<input name="coupon" placeholder="Digite seu cupom"></label><label>Mensagem para presente (opcional)<input name="gift" placeholder="Ex.: Com carinho, Maria" /></label><label>Enviar pedido para<select name="contact" id="contact-select"></select></label><label>Observações<textarea name="notes" placeholder="Ex.: cores, horário, endereço ou preferências"></textarea></label><button class="button full" type="submit">Enviar pedido no WhatsApp</button></form></dialog>
+    <!-- DIÁLOGOS DE UNIDADES E CHECKOUT -->
+    <dialog id="unit-dialog">
+      <button class="close dialog-close" aria-label="Fechar">×</button>
+      <p class="eyebrow">BRIGADEIROS AVULSOS</p>
+      <h2>Monte sua seleção</h2>
+      <p>Unidades avulsas custam R$ 4,00. A cada grupo completo de 4 brigadeiros, o valor é R$ 12,00. Escolha um de cada sabor para formar a caixa degustação por R$ 25,00.</p>
+      <div id="unit-picker" class="unit-picker"></div>
+      <div class="dialog-total">
+        <span id="units-total">0 unidades</span>
+        <strong id="units-price">R$ 0,00</strong>
+      </div>
+      <small class="discount-message" id="discount-message">Adicione 4 unidades para formar o primeiro grupo especial.</small>
+      <button class="outline-button negotiate-button" id="negotiate-large-order" type="button" hidden>Negociar pedido a partir de 100</button>
+      <button class="button button-gold full" id="add-units-cart" type="button" disabled>Adicionar à sacola</button>
+    </dialog>
+
+    <dialog id="checkout-dialog">
+      <button class="close dialog-close" aria-label="Fechar">×</button>
+      <p class="eyebrow">QUASE LÁ</p>
+      <h2>Finalize sua encomenda</h2>
+      <p>Envie o pedido pelo WhatsApp e confirmaremos os detalhes de entrega ou retirada.</p>
+      <form id="checkout-form">
+        <label>Seu nome<input required name="name" placeholder="Como podemos te chamar?" /></label>
+        <div class="form-columns">
+          <label>Data desejada<input required name="date" type="date" /></label>
+          <label>Horário desejado<input name="time" type="time" /></label>
+        </div>
+        <label>Entrega ou retirada
+          <select name="delivery">
+            <option value="pickup">Retirada em Rio Verde</option>
+            <option value="delivery">Entrega (confirmar endereço)</option>
+          </select>
+        </label>
+        <label>Pagamento
+          <select name="payment">
+            <option>Pix</option>
+            <option>Dinheiro</option>
+            <option>Cartão (consultar disponibilidade)</option>
+          </select>
+        </label>
+        <label>Cupom de desconto<input name="coupon" placeholder="Digite seu cupom"></label>
+        <label>Mensagem para presente (opcional)<input name="gift" placeholder="Ex.: Com carinho, Maria" /></label>
+        <label>Enviar pedido para<select name="contact" id="contact-select"></select></label>
+        <label>Observações<textarea name="notes" placeholder="Ex.: cores, horário, endereço ou preferências"></textarea></label>
+        <button class="button button-gold full" type="submit">Enviar pedido no WhatsApp</button>
+      </form>
+    </dialog>
+
     <script src="script.js"></script>
   </body>
 </html>
