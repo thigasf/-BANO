@@ -1,6 +1,14 @@
 const API_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
   ? 'http://localhost:5000/api'
   : 'https://ebano-seven.vercel.app/api';
+
+const storeLink = document.querySelector('#link-store-app');
+if (storeLink) {
+  storeLink.href = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:3000'
+    : 'https://ebano-loja.vercel.app';
+}
+
 const currency = value => Number(value || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
 const defaults = { 
