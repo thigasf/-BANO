@@ -226,6 +226,88 @@ function setupEventListeners() {
     unitDialog.close();
   };
 
+  // Configuração de Entrega estilo iFood & Busca de CEP ViaCEP
+  const deliverySelect = document.querySelector('#delivery-select');
+  const addressFields = document.querySelector('#address-fields');
+  const cepInput = document.querySelector('#cep-input');
+  const btnSearchCep = document.querySelector('#btn-search-cep');
+  const streetInput = document.querySelector('#street-input');
+  const numberInput = document.querySelector('#number-input');
+  const neighborhoodInput = document.querySelector('#neighborhood-input');
+  const addressError = document.querySelector('#address-error');
+
+  let isAddressValid = true;
+
+  if (deliverySelect && addressFields) {
+    deliverySelect.onchange = () => {
+      const isDelivery = deliverySelect.value === 'delivery';
+      addressFields.style.display = isDelivery ? 'block' : 'none';
+      if (!isDelivery && addressError) {
+        addressError.style.display = 'none';
+        isAddressValid = true;
+      }
+    };
+  }
+
+  async function handleCepSearch() {
+    if (!cepInput) return;
+    const cep = cepInput.value.replace(/\D/g, '');
+    if (cep.length !== 8) return;
+
+    if (addressError) {
+      addressError.style.display = 'none';
+      addressError.textContent = '';
+    }
+    isAddressValid = true;
+
+    try {
+      const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = await res.json();
+
+      if (data.erro) {
+        if (addressError) {
+          addressError.textContent = '❌ CEP não encontrado. Verifique o número digitado.';
+          addressError.style.display = 'block';
+        }
+        isAddressValid = false;
+        return;
+      }
+
+      // Validação Estrita de Cidade: Apenas Rio Verde - GO!
+      const city = data.localidade || '';
+      if (city.toLowerCase().trim() !== 'rio verde') {
+        if (addressError) {
+          addressError.textContent = `📍 Entregas indisponíveis para ${city} - ${data.uf}. No momento, a Ébano realiza entregas APENAS na cidade de Rio Verde - GO. Para outras cidades, por favor selecione "Retirada em Rio Verde"!`;
+          addressError.style.display = 'block';
+        }
+        isAddressValid = false;
+        if (streetInput) streetInput.value = '';
+        if (neighborhoodInput) neighborhoodInput.value = '';
+        return;
+      }
+
+      if (streetInput) streetInput.value = data.logradouro || '';
+      if (neighborhoodInput) neighborhoodInput.value = data.bairro || '';
+      if (numberInput) numberInput.focus();
+    } catch (e) {
+      console.error('Erro ao consultar CEP:', e);
+    }
+  }
+
+  if (cepInput) {
+    cepInput.oninput = () => {
+      const formatted = cepInput.value.replace(/\D/g, '').replace(/^(\d{5})(\d)/, '$1-$2');
+      cepInput.value = formatted;
+      if (cepInput.value.replace(/\D/g, '').length === 8) {
+        handleCepSearch();
+      }
+    };
+  }
+
+  if (btnSearchCep) {
+    btnSearchCep.onclick = handleCepSearch;
+  }
+
   // Sacola Checkout
   document.querySelector('#checkout').onclick = () => checkoutDialog.showModal();
   document.querySelector('#order-cta').onclick = () => {
@@ -241,11 +323,38 @@ function setupEventListeners() {
 
     try {
       const data = new FormData(event.target);
+      const deliveryMethod = data.get('delivery');
+
+      // Validar Endereço se for Entrega
+      if (deliveryMethod === 'delivery') {
+        const cep = (data.get('cep') || '').replace(/\D/g, '');
+        const street = (data.get('street') || '').trim();
+        const number = (data.get('number') || '').trim();
+        const neighborhood = (data.get('neighborhood') || '').trim();
+
+        if (!street || !number || !neighborhood) {
+          alert('Por favor, preencha todos os campos do endereço (Rua, Número e Bairro) para a entrega estilo iFood!');
+          submitBtn.disabled = false;
+          return;
+        }
+
+        if (!isAddressValid) {
+          alert('📍 Entregas são realizadas apenas na cidade de Rio Verde - GO. Altere o endereço ou escolha Retirada!');
+          submitBtn.disabled = false;
+          return;
+        }
+      }
+
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
       const couponValid = config.couponCode && data.get('coupon').trim().toUpperCase() === config.couponCode;
       const discount = couponValid ? subtotal * (Number(config.couponPercent || 0) / 100) : 0;
-      const fee = data.get('delivery') === 'delivery' ? Number(config.deliveryFee || 0) : 0;
+      const fee = deliveryMethod === 'delivery' ? Number(config.deliveryFee || 0) : 0;
       const total = subtotal - discount + fee;
+
+      // Formatando Endereço Estilo iFood
+      const formattedAddress = deliveryMethod === 'delivery' 
+        ? `${data.get('street')}, Nº ${data.get('number')} - ${data.get('neighborhood')}${data.get('complement') ? ` (${data.get('complement')})` : ''} - Rio Verde/GO (CEP: ${data.get('cep')})`
+        : 'Retirada em Rio Verde';
 
       // Montar payload para salvar no banco de dados
       const orderPayload = {
@@ -253,8 +362,8 @@ function setupEventListeners() {
         customer_phone: data.get('contact') === config.contact1_phone ? config.contact1_name : config.contact2_name,
         requested_date: data.get('date'),
         requested_time: data.get('time') || null,
-        fulfillment_method: data.get('delivery'),
-        delivery_address: data.get('delivery') === 'delivery' ? data.get('notes') : null,
+        fulfillment_method: deliveryMethod,
+        delivery_address: formattedAddress,
         payment_method: data.get('payment'),
         gift_message: data.get('gift') || null,
         notes: data.get('notes') || null,
@@ -281,13 +390,17 @@ function setupEventListeners() {
       const saveOrderData = await saveOrderRes.json();
       console.log('Pedido persistido com ID:', saveOrderData.order_id);
 
-      // Gerar mensagem formatada e abrir o WhatsApp
+      // Gerar mensagem formatada para WhatsApp estilo iFood
       const itemsText = cart.map(item => `• ${item.quantity}× ${item.name} — ${currency(item.price * item.quantity)}${item.detail ? `\n  ${item.detail}` : ''}`).join('\n');
       const pix = data.get('payment') === 'Pix' && config.pixKey ? `\n*Chave Pix:* ${config.pixKey}` : '';
-      const couponLine = couponValid ? `\n*Cupom:* ${config.couponCode} (-${currency(discount)})` : data.get('coupon') ? '\n*Cupom:* inválido ou não configurado' : '';
+      const couponLine = couponValid ? `\n*Cupom:* ${config.couponCode} (-${currency(discount)})` : data.get('coupon') ? '\n*Cupom:* inválido' : '';
       const orderIdLine = saveOrderData.order_id ? `\n*Pedido N°:* #${saveOrderData.order_id}` : '';
+      
+      const addressSection = deliveryMethod === 'delivery' 
+        ? `\n📍 *Endereço de Entrega (iFood style):*\n• Rua: ${data.get('street')}, N° ${data.get('number')}\n• Bairro: ${data.get('neighborhood')}${data.get('complement') ? `\n• Complemento: ${data.get('complement')}` : ''}\n• Cidade: Rio Verde - GO (CEP: ${data.get('cep')})`
+        : '\n📍 *Forma de Retirada:* Retirada em Rio Verde';
 
-      const message = `Olá! Quero fazer uma encomenda na Ébano.${orderIdLine}\n\n*Pedido:*\n${itemsText}\n\n*Subtotal:* ${currency(subtotal)}${couponLine}\n*Entrega:* ${fee ? currency(fee) : data.get('delivery') === 'delivery' ? 'a confirmar' : 'Retirada'}\n*Total:* ${currency(total)}\n*Nome:* ${data.get('name')}\n*Data e horário:* ${data.get('date')} ${data.get('time') || ''}\n*Pagamento:* ${data.get('payment')}\n*Mensagem para presente:* ${data.get('gift') || 'Nenhuma'}\n*Observações:* ${data.get('notes') || 'Nenhuma'}${pix}`;
+      const message = `Olá! Quero fazer uma encomenda na Ébano.${orderIdLine}\n\n*Pedido:*\n${itemsText}\n\n*Subtotal:* ${currency(subtotal)}${couponLine}\n*Entrega:* ${fee ? currency(fee) : deliveryMethod === 'delivery' ? 'a confirmar' : 'Retirada'}\n*Total:* ${currency(total)}\n*Nome:* ${data.get('name')}\n*Data e horário:* ${data.get('date')} ${data.get('time') || ''}${addressSection}\n*Pagamento:* ${data.get('payment')}\n*Mensagem para presente:* ${data.get('gift') || 'Nenhuma'}\n*Observações:* ${data.get('notes') || 'Nenhuma'}${pix}`;
       
       window.open(`https://wa.me/${data.get('contact')}?text=${encodeURIComponent(message)}`, '_blank');
       
