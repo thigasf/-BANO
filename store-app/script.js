@@ -73,15 +73,17 @@ async function initStore() {
       unitDialogText.textContent = `Unidades avulsas custam R$ ${getUnitPrice().toFixed(2).replace('.', ',')}. A cada grupo completo de 4 brigadeiros, o valor é R$ ${getBox4Price().toFixed(2).replace('.', ',')}. Escolha um de cada sabor para formar a caixa degustação por R$ ${getTastingPrice().toFixed(2).replace('.', ',')}.`;
     }
 
-    // Renderizar Cards de Produto
+    // Renderizar Cards de Produto com Imagens Reais
     const productGrid = document.querySelector('#product-grid');
     productGrid.innerHTML = products.map(product => {
       const isFeatured = product.product_type === 'unit';
       const label = product.product_type === 'unit' ? 'MONTE DO SEU JEITO' : 
                     product.product_type === 'box' ? (product.quantity === 4 ? 'PRESENTE' : 'DEGUSTAÇÃO') : 'FESTAS E EVENTOS';
-      const icon = product.product_type === 'unit' ? '✦' : 
-                   product.product_type === 'box' ? (product.quantity === 4 ? '□' : '◇') : '♢';
-                   
+                    
+      const cardImage = product.product_type === 'unit' ? 'hero-bg.png' :
+                        (product.quantity === 4 ? 'caixa-4.png' :
+                         (product.product_type === 'event' ? 'caixa-luxo-20.png' : 'caixa-12.png'));
+                    
       const priceVal = Number(product.base_price);
       const priceDisplay = isFeatured ? 
         `R$ ${priceVal.toFixed(2).replace('.', ',')} <small>cada grupo de 4 sai por R$ ${getBox4Price().toFixed(2).replace('.', ',')}</small>` : 
@@ -98,12 +100,14 @@ async function initStore() {
         );
 
       return `
-        <article class="product-card ${isFeatured ? 'featured' : ''}">
-          <span class="product-icon">${icon}</span>
-          <p class="card-label">${label}</p>
+        <article class="product-card ${isFeatured ? 'featured' : ''}" style="overflow: hidden;">
+          <div style="height: 180px; margin: -25px -25px 18px -25px; width: calc(100% + 50px); position: relative; overflow: hidden;">
+            <img src="${cardImage}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease;" />
+            <span class="card-label" style="position: absolute; top: 12px; left: 12px; background: rgba(12, 9, 7, 0.85); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--gold); margin: 0; color: var(--gold-light); font-size: 9px;">${label}</span>
+          </div>
           <h3>${product.name}</h3>
           <p>${product.description || ''}</p>
-          <strong>${priceDisplay}</strong>
+          <strong style="margin-top: auto; padding-top: 10px;">${priceDisplay}</strong>
           ${buttonHtml}
         </article>
       `;
