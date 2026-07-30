@@ -133,10 +133,14 @@
       <p class="eyebrow">QUASE LÁ</p>
       <h2>Finalize sua encomenda</h2>
       <p>Envie o pedido pelo WhatsApp e confirmaremos os detalhes de entrega ou retirada.</p>
-      <form id="checkout-form">
-        <label>Seu nome
-          <input required name="name" placeholder="Como podemos te chamar?" />
-        </label>
+        <div class="form-columns">
+          <label>Seu nome
+            <input required name="name" placeholder="Como podemos te chamar?" />
+          </label>
+          <label>Seu WhatsApp / Telefone (para avisos)
+            <input required name="phone" id="customer-phone-input" placeholder="(64) 99999-9999" maxlength="15" />
+          </label>
+        </div>
 
         <div class="form-columns">
           <label>Data desejada
@@ -188,12 +192,34 @@
         </div>
 
         <label>Forma de Pagamento
-          <select name="payment">
-            <option>Pix</option>
-            <option>Dinheiro</option>
-            <option>Cartão (consultar disponibilidade)</option>
+          <select name="payment" id="payment-select">
+            <option value="Pix">Pix</option>
+            <option value="Dinheiro">Dinheiro</option>
+            <option value="Cartão">Cartão (consultar disponibilidade)</option>
           </select>
         </label>
+
+        <!-- OPÇÃO DE TROCO (EXIBIDA QUANDO PAGAMENTO FOR DINHEIRO) -->
+        <div id="cash-change-container" style="display: none; background: rgba(189, 145, 79, 0.08); border: 1px solid rgba(189, 145, 79, 0.25); border-radius: var(--radius-sm); padding: 16px;">
+          <p class="eyebrow" style="margin-bottom: 10px; color: var(--gold-light);">INFORMAÇÃO DE TROCO</p>
+          <label style="margin-bottom: 10px;">Precisa de troco para dinheiro?
+            <select id="need-change-select" name="need_change">
+              <option value="no">Não, levarei o valor exato</option>
+              <option value="yes">Sim, preciso de troco</option>
+            </select>
+          </label>
+          <div id="change-value-box" style="display: none; margin-top: 12px;">
+            <label>Troco para quanto? (R$)
+              <input type="number" id="change-amount-input" name="change_amount" placeholder="Ex.: 50 ou 100" min="1" step="1" />
+            </label>
+            <div style="display: flex; gap: 8px; margin-top: 8px;">
+              <button type="button" class="outline-button chip-change" data-amount="50" style="padding: 6px 12px; font-size: 10px; border-radius: 12px; width: auto;">R$ 50</button>
+              <button type="button" class="outline-button chip-change" data-amount="100" style="padding: 6px 12px; font-size: 10px; border-radius: 12px; width: auto;">R$ 100</button>
+              <button type="button" class="outline-button chip-change" data-amount="200" style="padding: 6px 12px; font-size: 10px; border-radius: 12px; width: auto;">R$ 200</button>
+            </div>
+            <small id="change-calc-notice" style="display: block; margin-top: 8px; color: var(--gold-light); font-size: 11px; font-weight: 500;"></small>
+          </div>
+        </div>
 
         <label>Cupom de desconto
           <input name="coupon" placeholder="Digite seu cupom">

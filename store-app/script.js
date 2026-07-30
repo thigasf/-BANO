@@ -308,6 +308,91 @@ function setupEventListeners() {
     btnSearchCep.onclick = handleCepSearch;
   }
 
+  // Configuração Dinâmica de Troco para Pagamento em Dinheiro
+  const paymentSelect = document.querySelector('#payment-select');
+  const cashChangeContainer = document.querySelector('#cash-change-container');
+  const needChangeSelect = document.querySelector('#need-change-select');
+  const changeValueBox = document.querySelector('#change-value-box');
+  const changeAmountInput = document.querySelector('#change-amount-input');
+  const changeCalcNotice = document.querySelector('#change-calc-notice');
+
+  function updateChangeCalcNotice() {
+    if (!changeAmountInput || !changeCalcNotice) return;
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const fee = deliverySelect?.value === 'delivery' ? Number(config.deliveryFee || 0) : 0;
+    const estimatedTotal = subtotal + fee;
+
+    const cashValue = Number(changeAmountInput.value) || 0;
+    if (cashValue > 0) {
+      if (cashValue < estimatedTotal) {
+        changeCalcNotice.style.color = '#ff6b6b';
+        changeCalcNotice.textContent = `⚠️ O valor informado (${currency(cashValue)}) é menor que o total do pedido (${currency(estimatedTotal)}).`;
+      } else {
+        const changeDue = cashValue - estimatedTotal;
+        changeCalcNotice.style.color = 'var(--gold-light)';
+        changeCalcNotice.textContent = `💡 Troco a ser devolvido: ${currency(changeDue)}`;
+      }
+    } else {
+      changeCalcNotice.textContent = '';
+    }
+  }
+
+  if (paymentSelect && cashChangeContainer) {
+    paymentSelect.onchange = () => {
+      const isCash = paymentSelect.value === 'Dinheiro';
+      cashChangeContainer.style.display = isCash ? 'block' : 'none';
+      if (!isCash) {
+        needChangeSelect.value = 'no';
+        changeValueBox.style.display = 'none';
+        changeAmountInput.value = '';
+        changeCalcNotice.textContent = '';
+      }
+    };
+  }
+
+  if (needChangeSelect && changeValueBox) {
+    needChangeSelect.onchange = () => {
+      const needsChange = needChangeSelect.value === 'yes';
+      changeValueBox.style.display = needsChange ? 'block' : 'none';
+      if (needsChange) {
+        changeAmountInput.focus();
+        updateChangeCalcNotice();
+      } else {
+        changeAmountInput.value = '';
+        changeCalcNotice.textContent = '';
+      }
+    };
+  }
+
+  if (changeAmountInput) {
+    changeAmountInput.oninput = updateChangeCalcNotice;
+  }
+
+  document.querySelectorAll('.chip-change').forEach(chip => {
+    chip.onclick = () => {
+      if (changeAmountInput) {
+        changeAmountInput.value = chip.dataset.amount;
+        updateChangeCalcNotice();
+      }
+    };
+  });
+
+  const phoneInput = document.querySelector('#customer-phone-input');
+  if (phoneInput) {
+    phoneInput.oninput = () => {
+      let v = phoneInput.value.replace(/\D/g, '');
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 6) {
+        v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+      } else if (v.length > 2) {
+        v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+      } else if (v.length > 0) {
+        v = `(${v}`;
+      }
+      phoneInput.value = v;
+    };
+  }
+
   // Sacola Checkout
   document.querySelector('#checkout').onclick = () => checkoutDialog.showModal();
   document.querySelector('#order-cta').onclick = () => {
@@ -324,6 +409,9 @@ function setupEventListeners() {
     try {
       const data = new FormData(event.target);
       const deliveryMethod = data.get('delivery');
+      const paymentMethod = data.get('payment');
+      const needChange = data.get('need_change');
+      const changeAmount = Number(data.get('change_amount')) || 0;
 
       // Validar Endereço se for Entrega
       if (deliveryMethod === 'delivery') {
@@ -351,6 +439,26 @@ function setupEventListeners() {
       const fee = deliveryMethod === 'delivery' ? Number(config.deliveryFee || 0) : 0;
       const total = subtotal - discount + fee;
 
+      // Validar Troco se for Pagamento em Dinheiro com troco solicitado
+      if (paymentMethod === 'Dinheiro' && needChange === 'yes') {
+        if (!changeAmount || changeAmount < total) {
+          alert(`Por favor, informe um valor de troco igual ou superior ao total do pedido (${currency(total)})!`);
+          submitBtn.disabled = false;
+          return;
+        }
+      }
+
+      // Formatando Informação de Pagamento & Troco
+      let formattedPayment = paymentMethod;
+      if (paymentMethod === 'Dinheiro') {
+        if (needChange === 'yes' && changeAmount > 0) {
+          const changeDue = changeAmount - total;
+          formattedPayment = `Dinheiro (Troco para ${currency(changeAmount)} — Devolver ${currency(changeDue)})`;
+        } else {
+          formattedPayment = 'Dinheiro (Sem troco - valor exato)';
+        }
+      }
+
       // Formatando Endereço de Entrega
       const formattedAddress = deliveryMethod === 'delivery' 
         ? `${data.get('street')}, Nº ${data.get('number')} - ${data.get('neighborhood')}${data.get('complement') ? ` (${data.get('complement')})` : ''} - Rio Verde/GO (CEP: ${data.get('cep')})`
@@ -359,12 +467,12 @@ function setupEventListeners() {
       // Montar payload para salvar no banco de dados
       const orderPayload = {
         customer_name: data.get('name'),
-        customer_phone: data.get('contact') === config.contact1_phone ? config.contact1_name : config.contact2_name,
+        customer_phone: data.get('phone') || '',
         requested_date: data.get('date'),
         requested_time: data.get('time') || null,
         fulfillment_method: deliveryMethod,
         delivery_address: formattedAddress,
-        payment_method: data.get('payment'),
+        payment_method: formattedPayment,
         gift_message: data.get('gift') || null,
         notes: data.get('notes') || null,
         coupon_code: couponValid ? config.couponCode : null,
@@ -400,7 +508,7 @@ function setupEventListeners() {
         ? `\n📍 *Endereço de Entrega:*\n• Rua: ${data.get('street')}, N° ${data.get('number')}\n• Bairro: ${data.get('neighborhood')}${data.get('complement') ? `\n• Complemento: ${data.get('complement')}` : ''}\n• Cidade: Rio Verde - GO (CEP: ${data.get('cep')})`
         : '\n📍 *Forma de Retirada:* Retirada em Rio Verde';
 
-      const message = `Olá! Quero fazer uma encomenda na Ébano.${orderIdLine}\n\n*Pedido:*\n${itemsText}\n\n*Subtotal:* ${currency(subtotal)}${couponLine}\n*Entrega:* ${fee ? currency(fee) : deliveryMethod === 'delivery' ? 'a confirmar' : 'Retirada'}\n*Total:* ${currency(total)}\n*Nome:* ${data.get('name')}\n*Data e horário:* ${data.get('date')} ${data.get('time') || ''}${addressSection}\n*Pagamento:* ${data.get('payment')}\n*Mensagem para presente:* ${data.get('gift') || 'Nenhuma'}\n*Observações:* ${data.get('notes') || 'Nenhuma'}${pix}`;
+      const message = `Olá! Quero fazer uma encomenda na Ébano.${orderIdLine}\n\n*Pedido:*\n${itemsText}\n\n*Subtotal:* ${currency(subtotal)}${couponLine}\n*Entrega:* ${fee ? currency(fee) : deliveryMethod === 'delivery' ? 'a confirmar' : 'Retirada'}\n*Total:* ${currency(total)}\n*Nome do Cliente:* ${data.get('name')}\n*Telefone / WhatsApp:* ${data.get('phone')}\n*Data e horário:* ${data.get('date')} ${data.get('time') || ''}${addressSection}\n*Pagamento:* ${formattedPayment}\n*Mensagem para presente:* ${data.get('gift') || 'Nenhuma'}\n*Observações:* ${data.get('notes') || 'Nenhuma'}${pix}`;
       
       window.open(`https://wa.me/${data.get('contact')}?text=${encodeURIComponent(message)}`, '_blank');
       
