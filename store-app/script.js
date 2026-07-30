@@ -308,33 +308,64 @@ function setupEventListeners() {
     btnSearchCep.onclick = handleCepSearch;
   }
 
-  // Configuração Dinâmica de Troco para Pagamento em Dinheiro
+  // Configuração Dinâmica de Troco para Pagamento em Dinheiro & Validação de Cupom
   const paymentSelect = document.querySelector('#payment-select');
   const cashChangeContainer = document.querySelector('#cash-change-container');
   const needChangeSelect = document.querySelector('#need-change-select');
   const changeValueBox = document.querySelector('#change-value-box');
   const changeAmountInput = document.querySelector('#change-amount-input');
   const changeCalcNotice = document.querySelector('#change-calc-notice');
+  const couponInput = document.querySelector('#coupon-input');
+  const couponNotice = document.querySelector('#coupon-calc-notice');
+
+  function updateCouponAndChangeNotice() {
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const couponCode = (couponInput?.value || '').trim().toUpperCase();
+    const couponValid = config.couponCode && couponCode === config.couponCode.toUpperCase();
+    const discountPercent = couponValid ? Number(config.couponPercent || 0) : 0;
+    const discount = couponValid ? subtotal * (discountPercent / 100) : 0;
+    const fee = deliverySelect?.value === 'delivery' ? Number(config.deliveryFee || 0) : 0;
+    const estimatedTotal = subtotal - discount + fee;
+
+    // Atualizar Aviso do Cupom
+    if (couponNotice) {
+      if (couponCode) {
+        if (couponValid) {
+          couponNotice.style.color = 'var(--gold-light)';
+          couponNotice.textContent = `🎉 Cupom "${config.couponCode}" aplicado! Desconto de ${discountPercent}% (-${currency(discount)}). Total com desconto: ${currency(estimatedTotal)}`;
+        } else {
+          couponNotice.style.color = '#ff6b6b';
+          couponNotice.textContent = `❌ Cupom "${couponCode}" inválido ou não ativo.`;
+        }
+      } else {
+        couponNotice.textContent = '';
+      }
+    }
+
+    // Atualizar Troco com Total Descontado
+    if (changeAmountInput && changeCalcNotice) {
+      const cashValue = Number(changeAmountInput.value) || 0;
+      if (cashValue > 0) {
+        if (cashValue < estimatedTotal) {
+          changeCalcNotice.style.color = '#ff6b6b';
+          changeCalcNotice.textContent = `⚠️ O valor informado (${currency(cashValue)}) é menor que o total do pedido (${currency(estimatedTotal)}).`;
+        } else {
+          const changeDue = cashValue - estimatedTotal;
+          changeCalcNotice.style.color = 'var(--gold-light)';
+          changeCalcNotice.textContent = `💡 Troco a ser devolvido: ${currency(changeDue)}${discount > 0 ? ` (Total c/ desconto: ${currency(estimatedTotal)})` : ''}`;
+        }
+      } else {
+        changeCalcNotice.textContent = '';
+      }
+    }
+  }
 
   function updateChangeCalcNotice() {
-    if (!changeAmountInput || !changeCalcNotice) return;
-    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const fee = deliverySelect?.value === 'delivery' ? Number(config.deliveryFee || 0) : 0;
-    const estimatedTotal = subtotal + fee;
+    updateCouponAndChangeNotice();
+  }
 
-    const cashValue = Number(changeAmountInput.value) || 0;
-    if (cashValue > 0) {
-      if (cashValue < estimatedTotal) {
-        changeCalcNotice.style.color = '#ff6b6b';
-        changeCalcNotice.textContent = `⚠️ O valor informado (${currency(cashValue)}) é menor que o total do pedido (${currency(estimatedTotal)}).`;
-      } else {
-        const changeDue = cashValue - estimatedTotal;
-        changeCalcNotice.style.color = 'var(--gold-light)';
-        changeCalcNotice.textContent = `💡 Troco a ser devolvido: ${currency(changeDue)}`;
-      }
-    } else {
-      changeCalcNotice.textContent = '';
-    }
+  if (couponInput) {
+    couponInput.oninput = updateCouponAndChangeNotice;
   }
 
   if (paymentSelect && cashChangeContainer) {
@@ -347,6 +378,7 @@ function setupEventListeners() {
         changeAmountInput.value = '';
         changeCalcNotice.textContent = '';
       }
+      updateCouponAndChangeNotice();
     };
   }
 
@@ -356,7 +388,7 @@ function setupEventListeners() {
       changeValueBox.style.display = needsChange ? 'block' : 'none';
       if (needsChange) {
         changeAmountInput.focus();
-        updateChangeCalcNotice();
+        updateCouponAndChangeNotice();
       } else {
         changeAmountInput.value = '';
         changeCalcNotice.textContent = '';
@@ -365,14 +397,14 @@ function setupEventListeners() {
   }
 
   if (changeAmountInput) {
-    changeAmountInput.oninput = updateChangeCalcNotice;
+    changeAmountInput.oninput = updateCouponAndChangeNotice;
   }
 
   document.querySelectorAll('.chip-change').forEach(chip => {
     chip.onclick = () => {
       if (changeAmountInput) {
         changeAmountInput.value = chip.dataset.amount;
-        updateChangeCalcNotice();
+        updateCouponAndChangeNotice();
       }
     };
   });
@@ -394,10 +426,15 @@ function setupEventListeners() {
   }
 
   // Sacola Checkout
-  document.querySelector('#checkout').onclick = () => checkoutDialog.showModal();
+  document.querySelector('#checkout').onclick = () => {
+    updateCouponAndChangeNotice();
+    checkoutDialog.showModal();
+  };
   document.querySelector('#order-cta').onclick = () => {
-    if (cart.length) checkoutDialog.showModal();
-    else document.querySelector('#opcoes').scrollIntoView();
+    if (cart.length) {
+      updateCouponAndChangeNotice();
+      checkoutDialog.showModal();
+    } else document.querySelector('#opcoes').scrollIntoView();
   };
 
   // Enviar Formulário de Pedido (Salva no BD e depois envia no WhatsApp)
@@ -434,8 +471,10 @@ function setupEventListeners() {
       }
 
       const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-      const couponValid = config.couponCode && data.get('coupon').trim().toUpperCase() === config.couponCode;
-      const discount = couponValid ? subtotal * (Number(config.couponPercent || 0) / 100) : 0;
+      const couponInputVal = (data.get('coupon') || '').trim().toUpperCase();
+      const couponValid = Boolean(config.couponCode && couponInputVal === config.couponCode.toUpperCase());
+      const discountPercent = couponValid ? Number(config.couponPercent || 0) : 0;
+      const discount = couponValid ? subtotal * (discountPercent / 100) : 0;
       const fee = deliveryMethod === 'delivery' ? Number(config.deliveryFee || 0) : 0;
       const total = subtotal - discount + fee;
 
@@ -490,18 +529,25 @@ function setupEventListeners() {
       };
 
       // Gravar pedido via API do Backend
-      const saveOrderRes = await fetch(`${API_URL}/orders`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderPayload)
-      });
-      const saveOrderData = await saveOrderRes.json();
-      console.log('Pedido persistido com ID:', saveOrderData.order_id);
+      let saveOrderData = {};
+      try {
+        const saveOrderRes = await fetch(`${API_URL}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+        if (saveOrderRes.ok) {
+          saveOrderData = await saveOrderRes.json();
+          console.log('Pedido persistido com ID:', saveOrderData.order_id);
+        }
+      } catch (err) {
+        console.error('Falha ao conectar com banco:', err);
+      }
 
       // Gerar mensagem formatada para WhatsApp
       const itemsText = cart.map(item => `• ${item.quantity}× ${item.name} — ${currency(item.price * item.quantity)}${item.detail ? `\n  ${item.detail}` : ''}`).join('\n');
       const pix = data.get('payment') === 'Pix' && config.pixKey ? `\n*Chave Pix:* ${config.pixKey}` : '';
-      const couponLine = couponValid ? `\n*Cupom:* ${config.couponCode} (-${currency(discount)})` : data.get('coupon') ? '\n*Cupom:* inválido' : '';
+      const couponLine = couponValid ? `\n*Cupom Aplicado:* ${config.couponCode} (-${currency(discount)})` : couponInputVal ? '\n*Cupom:* Inválido' : '';
       const orderIdLine = saveOrderData.order_id ? `\n*Pedido N°:* #${saveOrderData.order_id}` : '';
       
       const addressSection = deliveryMethod === 'delivery' 
@@ -510,7 +556,27 @@ function setupEventListeners() {
 
       const message = `Olá! Quero fazer uma encomenda na Ébano.${orderIdLine}\n\n*Pedido:*\n${itemsText}\n\n*Subtotal:* ${currency(subtotal)}${couponLine}\n*Entrega:* ${fee ? currency(fee) : deliveryMethod === 'delivery' ? 'a confirmar' : 'Retirada'}\n*Total:* ${currency(total)}\n*Nome do Cliente:* ${data.get('name')}\n*Telefone / WhatsApp:* ${data.get('phone')}\n*Data e horário:* ${data.get('date')} ${data.get('time') || ''}${addressSection}\n*Pagamento:* ${formattedPayment}\n*Mensagem para presente:* ${data.get('gift') || 'Nenhuma'}\n*Observações:* ${data.get('notes') || 'Nenhuma'}${pix}`;
       
-      window.open(`https://wa.me/${data.get('contact')}?text=${encodeURIComponent(message)}`, '_blank');
+      const targetContact = data.get('contact') || config.contact1_phone || '556492854186';
+      const cleanContact = targetContact.replace(/\D/g, '') || '556492854186';
+      const waUrl = `https://wa.me/${cleanContact}?text=${encodeURIComponent(message)}`;
+
+      // Garantir abertura mesmo se houver bloqueio de pop-up
+      const win = window.open(waUrl, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        window.location.href = waUrl;
+      }
+      
+      // Limpar sacola e fechar modal
+      cart.length = 0;
+      renderCart();
+      checkoutDialog.close();
+    } catch (err) {
+      console.error('Erro ao processar pedido:', err);
+      alert('Ocorreu um erro ao processar o seu pedido. Tentando direcionar para o WhatsApp...');
+    } finally {
+      submitBtn.disabled = false;
+    }
+  };
       
       // Limpar sacola e fechar modal
       cart.length = 0;
