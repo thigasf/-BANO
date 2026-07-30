@@ -132,7 +132,10 @@ function setupEventListeners() {
   // Abrir modal de unidades avulsas
   const addUnitsBtn = document.querySelector('.add-units');
   if (addUnitsBtn) {
-    addUnitsBtn.onclick = () => unitDialog.showModal();
+    addUnitsBtn.onclick = () => {
+      updateUnits();
+      unitDialog.showModal();
+    };
   }
 
   // Fechar dialogs
@@ -148,6 +151,13 @@ function setupEventListeners() {
       return;
     }
     changeQuantity(button);
+  };
+
+  unitPicker.oninput = event => {
+    const input = event.target.closest('.qty-input');
+    if (!input) return;
+    quantities[input.dataset.flavor] = Math.max(0, Math.floor(Number(input.value) || 0));
+    updateUnits();
   };
 
   unitPicker.onchange = event => {
@@ -171,6 +181,15 @@ function setupEventListeners() {
     });
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(type => button.addEventListener(type, stopRepeating));
   });
+
+  // Botões de compras diretas da loja
+  const btnCaixa4 = document.querySelector('#btn-buy-caixa-4');
+  if (btnCaixa4) {
+    btnCaixa4.onclick = () => {
+      updateUnits();
+      unitDialog.showModal();
+    };
+  }
 
   // Botões de orçamento e negociação direta
   const quoteBtn = document.querySelector('.quote-button');
@@ -368,7 +387,8 @@ function updateUnits() {
   
   const negotiateBtn = document.querySelector('#negotiate-large-order');
   if (negotiateBtn) {
-    negotiateBtn.hidden = total <= 99; // Visível APENAS quando a quantidade for maior que 99 (a partir de 100)
+    negotiateBtn.hidden = total <= 99;
+    negotiateBtn.style.display = total > 99 ? 'block' : 'none';
   }
 
   document.querySelector('#add-units-cart').disabled = !total;
