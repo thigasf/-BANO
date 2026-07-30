@@ -333,7 +333,7 @@ function setupEventListeners() {
         const neighborhood = (data.get('neighborhood') || '').trim();
 
         if (!street || !number || !neighborhood) {
-          alert('Por favor, preencha todos os campos do endereço (Rua, Número e Bairro) para a entrega estilo iFood!');
+          alert('Por favor, preencha todos os campos do endereço (Rua, Número e Bairro) para a entrega!');
           submitBtn.disabled = false;
           return;
         }
@@ -351,7 +351,7 @@ function setupEventListeners() {
       const fee = deliveryMethod === 'delivery' ? Number(config.deliveryFee || 0) : 0;
       const total = subtotal - discount + fee;
 
-      // Formatando Endereço Estilo iFood
+      // Formatando Endereço de Entrega
       const formattedAddress = deliveryMethod === 'delivery' 
         ? `${data.get('street')}, Nº ${data.get('number')} - ${data.get('neighborhood')}${data.get('complement') ? ` (${data.get('complement')})` : ''} - Rio Verde/GO (CEP: ${data.get('cep')})`
         : 'Retirada em Rio Verde';
@@ -390,14 +390,14 @@ function setupEventListeners() {
       const saveOrderData = await saveOrderRes.json();
       console.log('Pedido persistido com ID:', saveOrderData.order_id);
 
-      // Gerar mensagem formatada para WhatsApp estilo iFood
+      // Gerar mensagem formatada para WhatsApp
       const itemsText = cart.map(item => `• ${item.quantity}× ${item.name} — ${currency(item.price * item.quantity)}${item.detail ? `\n  ${item.detail}` : ''}`).join('\n');
       const pix = data.get('payment') === 'Pix' && config.pixKey ? `\n*Chave Pix:* ${config.pixKey}` : '';
       const couponLine = couponValid ? `\n*Cupom:* ${config.couponCode} (-${currency(discount)})` : data.get('coupon') ? '\n*Cupom:* inválido' : '';
       const orderIdLine = saveOrderData.order_id ? `\n*Pedido N°:* #${saveOrderData.order_id}` : '';
       
       const addressSection = deliveryMethod === 'delivery' 
-        ? `\n📍 *Endereço de Entrega (iFood style):*\n• Rua: ${data.get('street')}, N° ${data.get('number')}\n• Bairro: ${data.get('neighborhood')}${data.get('complement') ? `\n• Complemento: ${data.get('complement')}` : ''}\n• Cidade: Rio Verde - GO (CEP: ${data.get('cep')})`
+        ? `\n📍 *Endereço de Entrega:*\n• Rua: ${data.get('street')}, N° ${data.get('number')}\n• Bairro: ${data.get('neighborhood')}${data.get('complement') ? `\n• Complemento: ${data.get('complement')}` : ''}\n• Cidade: Rio Verde - GO (CEP: ${data.get('cep')})`
         : '\n📍 *Forma de Retirada:* Retirada em Rio Verde';
 
       const message = `Olá! Quero fazer uma encomenda na Ébano.${orderIdLine}\n\n*Pedido:*\n${itemsText}\n\n*Subtotal:* ${currency(subtotal)}${couponLine}\n*Entrega:* ${fee ? currency(fee) : deliveryMethod === 'delivery' ? 'a confirmar' : 'Retirada'}\n*Total:* ${currency(total)}\n*Nome:* ${data.get('name')}\n*Data e horário:* ${data.get('date')} ${data.get('time') || ''}${addressSection}\n*Pagamento:* ${data.get('payment')}\n*Mensagem para presente:* ${data.get('gift') || 'Nenhuma'}\n*Observações:* ${data.get('notes') || 'Nenhuma'}${pix}`;
