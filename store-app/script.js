@@ -355,10 +355,22 @@ function updateUnits() {
   document.querySelector('#units-total').textContent = `${total} ${total === 1 ? 'unidade' : 'unidades'}`;
   document.querySelector('#units-price').textContent = currency(price);
   
-  discount.textContent = total >= 100 ? 'Pedido a partir de 100 brigadeiros: fale com a Maria para negociar um valor especial.' : tastingBox ? `Caixa degustação aplicada: 10 sabores por R$ ${tastingPrice.toFixed(2).replace('.', ',')}.` : groups ? `${groups} ${groups === 1 ? 'grupo de 4 aplicado' : 'grupos de 4 aplicados'} por R$ ${getBox4Price().toFixed(2).replace('.', ',')}${total % 4 ? ` + ${total % 4} ${total % 4 === 1 ? 'unidade avulsa' : 'unidades avulsas'} a R$ ${getUnitPrice().toFixed(2).replace('.', ',')}.` : '.'}` : `Faltam ${4 - total} ${4 - total === 1 ? 'unidade' : 'unidades'} para formar um grupo de R$ ${getBox4Price().toFixed(2).replace('.', ',')}.`;
-  discount.classList.toggle('active', tastingBox || groups > 0);
+  // Regra de negócio: Opção de negociar aparece apenas acima de 99 brigadeiros (100+)
+  discount.textContent = total > 99 
+    ? 'Pedido acima de 99 brigadeiros: você pode negociar um valor especial diretamente conosco.' 
+    : tastingBox 
+      ? `Caixa degustação aplicada: 10 sabores por R$ ${tastingPrice.toFixed(2).replace('.', ',')}.` 
+      : groups 
+        ? `${groups} ${groups === 1 ? 'grupo de 4 aplicado' : 'grupos de 4 aplicados'} por R$ ${getBox4Price().toFixed(2).replace('.', ',')}${total % 4 ? ` + ${total % 4} ${total % 4 === 1 ? 'unidade avulsa' : 'unidades avulsas'} a R$ ${getUnitPrice().toFixed(2).replace('.', ',')}.` : '.'}` 
+        : `Faltam ${4 - total} ${4 - total === 1 ? 'unidade' : 'unidades'} para formar um grupo de R$ ${getBox4Price().toFixed(2).replace('.', ',')}.`;
+        
+  discount.classList.toggle('active', tastingBox || groups > 0 || total > 99);
   
-  document.querySelector('#negotiate-large-order').hidden = total < 100;
+  const negotiateBtn = document.querySelector('#negotiate-large-order');
+  if (negotiateBtn) {
+    negotiateBtn.hidden = total <= 99; // Visível APENAS quando a quantidade for maior que 99 (a partir de 100)
+  }
+
   document.querySelector('#add-units-cart').disabled = !total;
 }
 
