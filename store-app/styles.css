@@ -861,10 +861,33 @@ input, select, textarea {
   transition: var(--transition);
 }
 
-input:focus, select:focus, textarea:focus {
-  outline: none;
-  border-color: var(--gold-light);
-  box-shadow: 0 0 15px rgba(189, 145, 79, 0.3);
+.discount-message {
+  display: block;
+  font-size: 12px;
+  color: var(--gold-light);
+  margin: 16px 0 14px;
+  line-height: 1.5;
+}
+
+.negotiate-button {
+  width: 100%;
+  margin: 10px 0 16px;
+  padding: 14px 20px;
+  border: 1px solid var(--gold);
+  background: rgba(189, 145, 79, 0.12);
+  color: var(--gold-light);
+  border-radius: var(--radius-pill);
+  font: 600 10px Montserrat;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.negotiate-button:hover {
+  background: var(--gold);
+  color: var(--black-pure);
+  box-shadow: 0 0 20px rgba(189, 145, 79, 0.4);
 }
 
 textarea {
